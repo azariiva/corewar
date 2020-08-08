@@ -3,20 +3,18 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: blinnea <blinnea@student.42.fr>            +#+  +:+       +#+         #
+#    By: lhitmonc <lhitmonc@42.fr>                  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2020/08/08 19:44:46 by blinnea           #+#    #+#              #
-#    Updated: 2020/08/08 20:15:48 by blinnea          ###   ########.fr        #
+#    Created: 2020/08/03 14:31:49 by lhitmonc          #+#    #+#              #
+#    Updated: 2020/08/08 22:37:30 by lhitmonc         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-# This is example. Customize it yourself.
-
 SHELL=/bin/zsh
-
 # **************************************************************************** #
 #                                 COLOURS                                      #
 # **************************************************************************** #
+
 DEFAULT = \033[0m
 YELLOW = \033[1;33m
 GREEN = \033[1;32m
@@ -27,66 +25,53 @@ GREENB = \033[42m
 #                               COMPILER OPTIONS                               #
 # **************************************************************************** #
 
-CC = clang
-CF = -Wall -Wextra -Werror -m64 -O3
+CC = gcc
+CF = #-Wall -Wextra -Werror -m64
 
-NAME = corewar
-
-# **************************************************************************** #
-#                               ABBREVIATIONS                                  #
-# **************************************************************************** #
-LFT =		libft
+NAME = visu_corewar
+LFT = libft
+SDL_LIB = ./SDL2/lib
+SDL_INC = ./SDL2/include/SDL2
 
 # **************************************************************************** #
 #                                 HEADERS                                      #
 # **************************************************************************** #
-LFT_H =		../$(LFT)/include/$(LFT).h
-EX_H	=	include/example.h
-# add your headers here
+
+LFT_H =		$(LFT)/include/$(LFT).h
+CRW_H =		include/visu_corewar.h
 
 # **************************************************************************** #
 #                                 FILENAMES                                    #
 # **************************************************************************** #
-EX_C	=	$(shell find src/example -name '*.c')
-# add your source-files here
 
-EX_O	=	$(addprefix obj/, $(EX_C:src/example/%.c=%.o))
-# add your object-files here
+FILES =		$(shell find src -name '*.c')
+OFILES =	$(addprefix obj/, $(FILES:src/%.c=%.o))
 
-# add YOUR_O here
-ALLO = $(EX_O)
+.PHONY: $(LFT) clean fclean re all
 
-.PHONY: dir $(LFT) clean fclean re all
+all: $(NAME)
+	@echo "\n> $(GREEN)$(NAME) created$(DEFAULT)"
 
-all: example # replace by your rule
-
-# create obj directory
-dir:
+obj:
 	@mkdir -p obj
 
-# this is reference
-example: $(LFT) $(EX_O)
-	@$(CC) $(EX_O) -L../$(LFT) -lft -o $@
-	@echo "\n> $(GREEN)example was created$(DEFAULT)"
+$(NAME): $(LFT) $(OFILES) $(LFT_H)
+	@$(CC) $(CF) $(OFILES) -L$(LFT) -lft -L$(SDL_LIB) -lSDL2 -L$(SDL_LIB) -lSDL_TTF -o $(NAME)
 
-# this is reference
-obj/%.o: src/example/%.c $(EX_H) $(LFT_H) | dir
-	@$(CC) $(CF) -c $< -o $@ -I ../$(LFT)/include -I include
+obj/%.o: src/%.c $(LFT_H) $(CRW_H) | obj
+	@$(CC) $(CF) -c $< -o $@ -I include -I $(LFT)/include -I $(SDL_INC)
 	@echo "$(GREENB) $(DEFAULT)\c"
 
 $(LFT):
-	@make all -C ../libft
+	@make -C $(LFT)
 
-# Do not change it. It should work properly.
 clean:
-	@make fclean -C ../$(LFT)
-	@rm -f $(ALLO)
-	@rm -rf obj
+	@make fclean -C libft
+	@rm -f $(OFILES)
+	@rm -fd obj
 	@echo "> $(YELLOW)$(NAME) clean$(DEFAULT)"
 
-# Remove "@rm -f example" later
 fclean: clean
-	@rm -f example
 	@rm -f $(NAME)
 	@echo "> $(RED)$(NAME) fclean$(DEFAULT)"
 
