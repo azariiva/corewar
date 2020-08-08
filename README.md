@@ -1,11 +1,11 @@
 # References
 
 ## .vscode
-	Change "program" field in launch.json
-	Change "command" field in tasks.json
+> Change "program" field in launch.json
+> Change "command" field in tasks.json
 
 ## example
-	You have examples in your directory. Use them as a reference for Makefile.
+> You have examples in your directory. Use them as a reference for Makefile.
 
 # Rules
 
