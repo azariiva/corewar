@@ -4,7 +4,7 @@
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
 #    By: blinnea <blinnea@student.42.fr>            +#+  +:+       +#+         #
-#                                                 +#+#+#+#+#+   +#+            #
+#           1                                      +#+#+#+#+#+   +#+            #
 #    Created: 2020/08/08 19:44:46 by blinnea           #+#    #+#              #
 #    Updated: 2020/08/08 20:15:48 by blinnea          ###   ########.fr        #
 #                                                                              #
@@ -30,7 +30,7 @@ GREENB = \033[42m
 CC = clang
 CF = -Wall -Wextra -Werror -m64 -O3
 
-NAME = corewar
+NAME = asm
 
 # **************************************************************************** #
 #                               ABBREVIATIONS                                  #
@@ -41,36 +41,40 @@ LFT =		libft
 #                                 HEADERS                                      #
 # **************************************************************************** #
 LFT_H =		../$(LFT)/include/$(LFT).h
-EX_H	=	include/example.h
+ASM_H	=	include/asm.h
 # add your headers here
 
 # **************************************************************************** #
 #                                 FILENAMES                                    #
 # **************************************************************************** #
-EX_C	=	$(shell find src/example -name '*.c')
+ASM_C	=	$(shell find src/parser -name '*.c')
 # add your source-files here
 
-EX_O	=	$(addprefix obj/, $(EX_C:src/example/%.c=%.o))
+ASM_O	=	$(addprefix obj/, $(ASM_C:src/parser/%.c=%.o))
 # add your object-files here
 
 # add YOUR_O here
-ALLO = $(EX_O)
+ALLO = $(ASM_O)
 
 .PHONY: dir $(LFT) clean fclean re all
 
-all: example # replace by your rule
+all: $(NAME) # replace by your rule
 
 # create obj directory
 dir:
 	@mkdir -p obj
 
 # this is reference
-example: $(LFT) $(EX_O)
-	@$(CC) $(EX_O) -L../$(LFT) -lft -o $@
-	@echo "\n> $(GREEN)example was created$(DEFAULT)"
+$(NAME): $(LFT) $(ASM_O) obj/asm.o
+	@$(CC) $(ASM_O) obj/asm.o -L../$(LFT) -lft -o $@
+	@echo "\n> $(GREEN)asm was created$(DEFAULT)"
+
+obj/asm.o: src/asm.c $(ASM_H) $(LFT_H)
+	@$(CC) $(CF) -c $< -o $@ -I ../$(LFT)/include -I include
+	@echo "$(GREENB) $(DEFAULT)\c"
 
 # this is reference
-obj/%.o: src/example/%.c $(EX_H) $(LFT_H) | dir
+obj/%.o: src/parser/%.c $(ASM_H) $(LFT_H) | dir
 	@$(CC) $(CF) -c $< -o $@ -I ../$(LFT)/include -I include
 	@echo "$(GREENB) $(DEFAULT)\c"
 
@@ -84,9 +88,9 @@ clean:
 	@rm -rf obj
 	@echo "> $(YELLOW)$(NAME) clean$(DEFAULT)"
 
-# Remove "@rm -f example" later
+# Remove "@rm -f asm" later
 fclean: clean
-	@rm -f example
+	@rm -f asm
 	@rm -f $(NAME)
 	@echo "> $(RED)$(NAME) fclean$(DEFAULT)"
 
