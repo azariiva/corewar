@@ -47,10 +47,10 @@ ASM_H	=	include/asm.h
 # **************************************************************************** #
 #                                 FILENAMES                                    #
 # **************************************************************************** #
-ASM_C	=	$(shell find src/parser -name '*.c')
+ASM_C	=	$(shell find src/ -name '*.c')
 # add your source-files here
 
-ASM_O	=	$(addprefix obj/, $(ASM_C:src/parser/%.c=%.o))
+ASM_O	=	$(addprefix obj/, $(ASM_C:src/%.c=%.o))
 # add your object-files here
 
 # add YOUR_O here
@@ -65,16 +65,12 @@ dir:
 	@mkdir -p obj
 
 # this is reference
-$(NAME): $(LFT) $(ASM_O) obj/asm.o
-	@$(CC) $(ASM_O) obj/asm.o -L../$(LFT) -lft -o $@
+$(NAME): $(LFT) $(ASM_O)
+	@$(CC) $(ASM_O) -L../$(LFT) -lft -o $@
 	@echo "\n> $(GREEN)asm was created$(DEFAULT)"
 
-obj/asm.o: src/asm.c $(ASM_H) $(LFT_H)
-	@$(CC) $(CF) -c $< -o $@ -I ../$(LFT)/include -I include
-	@echo "$(GREENB) $(DEFAULT)\c"
-
 # this is reference
-obj/%.o: src/parser/%.c $(ASM_H) $(LFT_H) | dir
+obj/%.o: src/%.c $(ASM_H) $(LFT_H) | dir
 	@$(CC) $(CF) -c $< -o $@ -I ../$(LFT)/include -I include
 	@echo "$(GREENB) $(DEFAULT)\c"
 
