@@ -5,12 +5,10 @@
 #                                                     +:+ +:+         +:+      #
 #    By: blinnea <blinnea@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2020/08/08 19:44:46 by blinnea           #+#    #+#              #
-#    Updated: 2020/08/08 20:15:48 by blinnea          ###   ########.fr        #
+#    Created: 2020/08/15 19:50:55 by blinnea           #+#    #+#              #
+#    Updated: 2020/08/15 20:33:48 by blinnea          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
-
-# This is example. Customize it yourself.
 
 SHELL=/bin/zsh
 
@@ -28,50 +26,49 @@ GREENB = \033[42m
 # **************************************************************************** #
 
 CC = clang
-CF = -Wall -Wextra -Werror -m64 -O3
+CF = -Wall -Wextra -Werror -m64 -O3 -ggdb
 
 NAME = corewar
 
 # **************************************************************************** #
 #                               ABBREVIATIONS                                  #
 # **************************************************************************** #
-LFT =		libft
+LFT =		../libft/libft.a
 
 # **************************************************************************** #
 #                                 HEADERS                                      #
 # **************************************************************************** #
-LFT_H =		../$(LFT)/include/$(LFT).h
-EX_H	=	include/example.h
-# add your headers here
+LFT_H =		../libft/include/libft.h
+OP_H =		include/op.h
+VM_H =		include/vm.h
 
 # **************************************************************************** #
 #                                 FILENAMES                                    #
 # **************************************************************************** #
-EX_C	=	$(shell find src/example -name '*.c')
-# add your source-files here
+# Someone told me that we can't use "shell find".
+# TODO: Ask this in Slack.
+VM_C	=	$(shell find src/vm -name '*.c')
 
-EX_O	=	$(addprefix obj/, $(EX_C:src/example/%.c=%.o))
-# add your object-files here
+VM_O	=	$(VM_C:src/vm/%.c=obj/%.o)
 
-# add YOUR_O here
-ALLO = $(EX_O)
+ALLO	=	$(VM_O)
 
 .PHONY: dir $(LFT) clean fclean re all
 
-all: example # replace by your rule
+all: $(NAME)
 
-# create obj directory
 dir:
 	@mkdir -p obj
 
-# this is reference
-example: $(LFT) $(EX_O)
-	@$(CC) $(EX_O) -L../$(LFT) -lft -o $@
-	@echo "\n> $(GREEN)example was created$(DEFAULT)"
+$(NAME): obj/vm.o $(LFT) $(VM_O)
+	@$(CC) $< $(VM_O) -L../libft -lft -o $@
 
-# this is reference
-obj/%.o: src/example/%.c $(EX_H) $(LFT_H) | dir
-	@$(CC) $(CF) -c $< -o $@ -I ../$(LFT)/include -I include
+obj/vm.o: src/vm.c $(VM_H) $(OP_H) $(LFT_H) | dir
+	@$(CC) $(CF) -c $< -o $@ -I ../libft/include -I include
+	@echo "$(GREENB) $(DEFAULT)\c"
+
+obj/%.o: src/vm/%.c $(VM_H) $(OP_H) $(LFT_H) | dir
+	@$(CC) $(CF) -c $< -o $@ -I ../libft/include -I include
 	@echo "$(GREENB) $(DEFAULT)\c"
 
 $(LFT):
@@ -79,14 +76,12 @@ $(LFT):
 
 # Do not change it. It should work properly.
 clean:
-	@make fclean -C ../$(LFT)
+	@make fclean -C ../libft
 	@rm -f $(ALLO)
 	@rm -rf obj
 	@echo "> $(YELLOW)$(NAME) clean$(DEFAULT)"
 
-# Remove "@rm -f example" later
 fclean: clean
-	@rm -f example
 	@rm -f $(NAME)
 	@echo "> $(RED)$(NAME) fclean$(DEFAULT)"
 
