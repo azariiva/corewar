@@ -1,16 +1,23 @@
 #include "asm.h"
 
-static void		assemble(char *file)
+static int		assemble(char *file)
 {
-	int		fd1;
-	int		fd2;
+	int		fdin;
+	t_parse	*parser;
 
-	if (!(fd1 = open(file, O_RDONLY)))
+	if (!(fdin = open(file, O_RDONLY)))
 		ft_printf("File open error\n");
-	if (!(fd2 = open(new_filename(file, ".cor"), O_CREAT | O_WRONLY | O_RDONLY)))
-		ft_printf("File open error\n");
-	parse(fd1, fd2);
+	parser = (t_parse *)malloc(sizeof(t_parse));
+	parser->row = 0;
+	parser->column = 0;
+	parser->fd = fdin;
+	parser->tokens = NULL;
+	if (!(parser->name = ft_memalloc(sizeof(char) * PROG_NAME_LENGTH)) ||
+	!(parser->comment = ft_memalloc(sizeof(char) * COMMENT_LENGTH)))
+		return (ERR);
+	parse(parser);
 	ft_printf("OK\n");
+	return (OK);
 }
 
 int				main(int ac, char **av)

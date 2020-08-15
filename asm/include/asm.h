@@ -6,7 +6,7 @@
 /*   By: fhilary <fhilary@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/08 19:53:09 by blinnea           #+#    #+#             */
-/*   Updated: 2020/08/13 20:09:48 by fhilary          ###   ########.fr       */
+/*   Updated: 2020/08/15 19:56:32 by fhilary          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,8 @@
 # include <stdlib.h>
 # include <fcntl.h>
 # include "libft_printf.h"
+#include "libft_get_next_line.h"
+# include "op.h"
 
 # define ERR_STR_INIT			"ERROR: Can\'t initialize string"
 # define ERR_PARSER_INIT		"ERROR: Can\'t initialize parser"
@@ -46,16 +48,16 @@ typedef enum	e_type
 	DIRECT,
 	STRING,
 	COMMAND,
-	LABEL,
 	NEW_LINE,
-	END
+	END_LINE
 }				t_type;
 
 typedef struct	s_token
 {
+	char			*content;
 	t_type			type;
 	int				row;
-	int				colomn;
+	int				column;
 }				t_token;
 
 typedef struct	s_parse
@@ -63,12 +65,17 @@ typedef struct	s_parse
 	char		*name;
 	char		*comment;
 	int			fd;
-	t_token		*tokens;
+	int			row;
+	int			column;
+	t_queue		*tokens;
 }				t_parse;
 
-int		isrighttype(char *name);
-char	*new_filename(char *file, char *type);
+int				isrighttype(char *name);
+char			*new_filename(char *file, char *type);
 
-void	as_parse(t_parse *parser);
-
+int				parse(t_parse *parser);
+void			pr_skip_space(t_parse *parser, char *line);
+void			pr_skip_comment(t_parse *parser, char *line);
+void			pr_gettoken(t_parse *parser, char *line);
+void			str_parse(t_parse *parser, char *line);
 #endif

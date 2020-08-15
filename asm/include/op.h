@@ -2,7 +2,7 @@
 
 # define OP_H
 
-# include "libft.h"
+# include <stdbool.h>
 
 # define IND_SIZE				2
 # define REG_SIZE				4
@@ -19,6 +19,7 @@
 # define CHAMP_MAX_SIZE			(MEM_SIZE / 6)
 
 # define COMMENT_CHAR			'#'
+# define ALT_COMMENT_CHAR		';'
 # define LABEL_CHAR				':'
 # define DIRECT_CHAR			'%'
 # define SEPARATOR_CHAR			','
@@ -62,7 +63,7 @@ typedef struct		header_s
   char				comment[COMMENT_LENGTH + 1];
 }					header_t;
 
-typedef struct		s_op
+typedef struct		s_asop
 {
 	char		*name;
 	u_int8_t	bytecode;
@@ -70,9 +71,11 @@ typedef struct		s_op
 	int			arg_types[3];
 	bool		arg_types_code;
 	int			t_dir_size;
-}					t_op;
+}					t_asop;
 
-t_op    op_tab[17] =
+# ifndef OP_TAB
+#  define OP_TAB
+static const t_asop    op_tab[17] =
 {
 	{
 		.name = "live",
@@ -211,5 +214,6 @@ t_op    op_tab[17] =
 		.t_dir_size = 0
 	}
 };
+# endif
 
 #endif

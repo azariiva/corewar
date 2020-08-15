@@ -28,7 +28,7 @@ GREENB = \033[42m
 # **************************************************************************** #
 
 CC = clang
-CF = -Wall -Wextra -Werror -m64 -O3
+CF = -Wall -Wextra -Werror -ggdb -m64 -O3
 
 NAME = asm
 
@@ -41,7 +41,8 @@ LFT =		libft
 #                                 HEADERS                                      #
 # **************************************************************************** #
 LFT_H =		../$(LFT)/include/$(LFT).h
-ASM_H	=	include/asm.h
+ASM_H =		include/asm.h
+OP_H = 		include/op.h
 # add your headers here
 
 # **************************************************************************** #
@@ -70,7 +71,7 @@ $(NAME): $(LFT) $(ASM_O)
 	@echo "\n> $(GREEN)asm was created$(DEFAULT)"
 
 # this is reference
-obj/%.o: src/%.c $(ASM_H) $(LFT_H) | dir
+obj/%.o: src/%.c $(ASM_H) $(OP_H) $(LFT_H) | dir
 	@$(CC) $(CF) -c $< -o $@ -I ../$(LFT)/include -I include
 	@echo "$(GREENB) $(DEFAULT)\c"
 
