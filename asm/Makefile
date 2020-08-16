@@ -28,7 +28,7 @@ GREENB = \033[42m
 # **************************************************************************** #
 
 CC = clang
-CF = -Wall -Wextra -Werror -ggdb -m64 -O3 -ggdb
+CF = -Wall -Wextra -Werror -m64 -ggdb
 
 NAME = asm
 
@@ -87,7 +87,6 @@ clean:
 
 # Remove "@rm -f asm" later
 fclean: clean
-	@rm -f asm
 	@rm -f $(NAME)
 	@echo "> $(RED)$(NAME) fclean$(DEFAULT)"
 

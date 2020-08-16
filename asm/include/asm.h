@@ -6,7 +6,7 @@
 /*   By: fhilary <fhilary@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/08 19:53:09 by blinnea           #+#    #+#             */
-/*   Updated: 2020/08/16 14:41:00 by fhilary          ###   ########.fr       */
+/*   Updated: 2020/08/16 20:28:23 by fhilary          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,7 @@
 # define ERR_NO_NULL			"ERROR: No null control bytes"
 # define ERR_CODE_INIT			"ERROR: Can\'t initialize string of code"
 # define ERR_INVALID_CODE_SIZE	"ERROR: Invalid code size"
+# define LEXICAL_ERROR			"Lexical error at"
 
 typedef enum	e_type
 {
@@ -42,15 +43,34 @@ typedef enum	e_type
 	INSTRUCTION,
 	COMMAND_NAME,
 	COMMAND_COMMENT,
+	INDIRECT,
 	REGISTER,
 	SEPARATOR,
 	DIRECT_LABEL,
 	DIRECT,
 	STRING,
 	COMMAND,
-	NEW_LINE,
-	END_LINE
+	END_LINE,
+	END_FILE
 }				t_type;
+
+static char	*g_typearr[] = {
+	"LABEL",
+	"INSTRUCTION",
+	"COMMAND_NAME",
+	"COMMAND_COMMENT",
+	"INDIRECT",
+	"REGISTER",
+	"SEPARATOR",
+	"DIRECT_LABEL",
+	"DIRECT",
+	"STRING",
+	"COMMAND",
+	"END_LINE",
+	"END_FILE"
+};
+
+# define TSTR(T) (g_typearr[T])
 
 typedef struct	s_token
 {
@@ -76,9 +96,18 @@ typedef struct	s_parse
 int				isrighttype(char *name);
 char			*new_filename(char *file, char *type);
 
+void			add_token(t_parse *parser, t_type type);
+
 int				parse(t_parse *parser);
 void			pr_skip_space(t_parse *parser, char *line);
 void			pr_skip_comment(t_parse *parser, char *line);
 void			pr_gettoken(t_parse *parser, char *line);
-void			str_parse(t_parse *parser, char *line);
+void			string_parse(t_parse *parser, char *line);
+void			lable_parse(t_parse *parser, char *line);
+void			number_parse(t_parse *parser, char *line);
+void			register_parse(t_parse *parser, char *line);
+int				register_len(t_parse *parser, char *line);
+void			other_parse(t_parse *parser, char *line);
+
+void			error(int row, int column, char *err);
 #endif
