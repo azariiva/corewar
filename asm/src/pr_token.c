@@ -7,7 +7,7 @@ static void		add_token(t_parse *parser, t_type type)
 	ft_bzero(&token, sizeof(token));
 	token.type = type;
 	token.row = parser->row;
-	token.column = parser->column;
+	token.column = parser->column + 1;
 	if (!parser->tokens)
 		parser->tokens = ft_quenew(&token, sizeof(t_token));
 	else
@@ -41,3 +41,4 @@ void			pr_gettoken(t_parse *parser, char *line)
 		str_parse(parser, line);
 	}
 }
+

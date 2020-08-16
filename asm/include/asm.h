@@ -6,7 +6,7 @@
 /*   By: fhilary <fhilary@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/08 19:53:09 by blinnea           #+#    #+#             */
-/*   Updated: 2020/08/16 13:33:57 by fhilary          ###   ########.fr       */
+/*   Updated: 2020/08/16 14:41:00 by fhilary          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ typedef enum	e_type
 
 typedef struct	s_token
 {
-	char			*content;
+	char			content[COMMENT_LENGTH];
 	t_type			type;
 	int				row;
 	int				column;
@@ -69,6 +69,9 @@ typedef struct	s_parse
 	int			column;
 	t_queue		*tokens;
 }				t_parse;
+
+# define GET_TF(ts, f, HT) (HT(t_token, ts)->f)
+# define GET_PTOKENS(p, f, HT) (GET_TF(p->tokens, f, HT))
 
 int				isrighttype(char *name);
 char			*new_filename(char *file, char *type);

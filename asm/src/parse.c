@@ -3,16 +3,17 @@
 void	str_parse(t_parse *parser, char *line)
 {
 	char	*newline;
-	size_t	size;
 
 	line = line + parser->column;
 	while (!ft_strchr(line + 1, '\"') &&
-	(size = get_next_line(parser->fd, &newline)) > 0 && ++parser->row)
+	get_next_line(parser->fd, &newline) == OK && ++parser->row)
 	{
 		line = ft_strjoin(line, "\n");
 		line = ft_strjoin(line, newline);
+		ft_strdel(&newline);
 	}
-	
+	parser->column += ft_strlen(line) + 1;
+	ft_strcpy(GET_PTOKENS(parser, content, FT_QUETAIL), line);
 }
 
 int		parse(t_parse *parser)
