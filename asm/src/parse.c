@@ -5,18 +5,21 @@ void	str_parse(t_parse *parser, char *line)
 	char	*newline;
 	size_t	size;
 
+	line = line + parser->column;
 	while (!ft_strchr(line + 1, '\"') &&
 	(size = get_next_line(parser->fd, &newline)) > 0 && ++parser->row)
+	{
+		line = ft_strjoin(line, "\n");
 		line = ft_strjoin(line, newline);
-	ft_printf("big line:%s\n", line);
+	}
+	
 }
 
 int		parse(t_parse *parser)
 {
-	size_t	size;
 	char	*line;
 
-	while (++parser->row && (size = get_next_line(parser->fd, &line)) > 0)
+	while (++parser->row && get_next_line(parser->fd, &line) == OK)
 	{
 		while (line[parser->column])
 		{

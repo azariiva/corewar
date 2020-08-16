@@ -2,9 +2,7 @@
 
 int		isrighttype(char *name)
 {
-	if (!ft_strcmp(name + (ft_strlen(name) - 2), ".s"))
-		return (1);
-	return (0);
+	return (!ft_strcmp(name + (ft_strlen(name) - 2), ".s"));
 }
 
 char	*new_filename(char *file, char *type)

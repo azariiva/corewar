@@ -6,7 +6,7 @@
 /*   By: fhilary <fhilary@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/08 19:53:09 by blinnea           #+#    #+#             */
-/*   Updated: 2020/08/15 19:56:32 by fhilary          ###   ########.fr       */
+/*   Updated: 2020/08/16 13:33:57 by fhilary          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,8 +62,8 @@ typedef struct	s_token
 
 typedef struct	s_parse
 {
-	char		*name;
-	char		*comment;
+	char		name[PROG_NAME_LENGTH];
+	char		comment[COMMENT_LENGTH];
 	int			fd;
 	int			row;
 	int			column;

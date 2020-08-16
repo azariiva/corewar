@@ -28,7 +28,7 @@ GREENB = \033[42m
 # **************************************************************************** #
 
 CC = clang
-CF = -Wall -Wextra -Werror -ggdb -m64 -O3
+CF = -Wall -Wextra -Werror -ggdb -m64 -O3 -ggdb
 
 NAME = asm
 
@@ -67,7 +67,7 @@ dir:
 
 # this is reference
 $(NAME): $(LFT) $(ASM_O)
-	@$(CC) $(ASM_O) -L../$(LFT) -lft -o $@
+	@$(CC) $(CF) $(ASM_O) -L../$(LFT) -lft -o $@
 	@echo "\n> $(GREEN)asm was created$(DEFAULT)"
 
 # this is reference
