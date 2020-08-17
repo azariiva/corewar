@@ -6,7 +6,7 @@
 /*   By: blinnea <blinnea@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/15 18:12:50 by blinnea           #+#    #+#             */
-/*   Updated: 2020/08/15 21:06:57 by blinnea          ###   ########.fr       */
+/*   Updated: 2020/08/17 14:36:41 by blinnea          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,10 +27,17 @@ inline static void	add_champ(char *fname, int idx, t_player *players)
 			++idx;
 	}
 	players[pidx].idx = idx + 1;
-	ft_strcpy(players[pidx++].fname, fname);
+	players[pidx++].fname = fname;
 	occidxs[idx] = true;
 }
 
+static int			cmp(void *a, void *b)
+{
+	
+}
+/*
+** TODO: add option for visualizer
+*/
 t_player			*read_champs(t_acav acav)
 {
 	static t_player	players[MAX_PLAYERS];
