@@ -1,6 +1,6 @@
 #include "asm.h"
 
-static void		assemble(char *file)
+static void		execute(char *file)
 {
 	int		fdin;
 	t_parse	parser;
@@ -10,12 +10,14 @@ static void		assemble(char *file)
 	ft_bzero(&parser, sizeof(t_parse));
 	parser.fd = fdin;
 	parse(&parser);
+	collection(&parser);
+	show_tokens(&parser);
 }
 
 int				main(int ac, char **av)
 {
 	if (ac == 2 && isrighttype(av[1]))
-		assemble(av[1]);
+		execute(av[1]);
 	else
 		ft_printf("Wrong file type\n");
 	return (0);

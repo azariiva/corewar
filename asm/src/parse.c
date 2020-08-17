@@ -13,6 +13,8 @@ void	string_parse(t_parse *parser, char *line)
 		ft_strdel(&newline);
 	}
 	parser->column += ft_strlen(line) + 1;
+	if (ft_strlen(line) > COMMENT_LENGTH)
+		error(ERR_LEN_STRING);
 	ft_strcpy(GET_PTOKENS(parser, content, FT_QUETAIL), line);
 }
 
@@ -27,7 +29,7 @@ void	number_parse(t_parse *parser, char *line)
 		len++;
 	if (line[len] && !ft_isspace(line[len]) && line[len] != '-' &&
 	line[len] != SEPARATOR_CHAR)
-		error(parser->row, parser->column + len, LEXICAL_ERROR);
+		lex_error(parser->row, parser->column + len);
 	ft_strncpy(GET_PTOKENS(parser, content, FT_QUETAIL),
 	line + parser->column, len - parser->column);
 	parser->column = len;
@@ -42,7 +44,7 @@ void	lable_parse(t_parse *parser, char *line)
 		len++;
 	if (line[len] && !ft_isspace(line[len]) && line[len] != '-' &&
 	line[len] != SEPARATOR_CHAR)
-		error(parser->row, parser->column + len, LEXICAL_ERROR);
+		lex_error(parser->row, parser->column + len);
 	ft_strncpy(GET_PTOKENS(parser, content, FT_QUETAIL),
 	line + parser->column, len - parser->column);
 	parser->column = len;
@@ -97,7 +99,7 @@ void	other_parse(t_parse *parser, char *line)
 	}
 	if (line[len] && !ft_isspace(line[len]) && line[len] != '-' &&
 	line[len] != SEPARATOR_CHAR)
-		error(parser->row, parser->column + len, LEXICAL_ERROR);
+		lex_error(parser->row, parser->column + len);
 	if (flag)
 		GET_PTOKENS(parser, type, FT_QUETAIL) = INSTRUCTION;
 	ft_strncpy(GET_PTOKENS(parser, content, FT_QUETAIL),
@@ -105,33 +107,19 @@ void	other_parse(t_parse *parser, char *line)
 	parser->column = len;
 }
 
-void	show_tokens(t_parse *parser)
-{
-	t_queue	*tokens;
-
-	tokens = parser->tokens;
-	while (tokens->head)
-	{
-		ft_printf("[TOKEN][%d:%d] %s %s\n", ((t_token *)tokens->head->content)->row,
-		((t_token *)tokens->head->content)->column,
-		TSTR(((t_token *)tokens->head->content)->type),
-		((t_token *)tokens->head->content)->content);
-		tokens->head = tokens->head->next;
-	}
-}
-
-int		parse(t_parse *parser)
+void	parse(t_parse *parser)
 {
 	char	*line;
 	int		row;
+	size_t	size;
 
-	while (++parser->row && get_next_line(parser->fd, &line) == OK)
+	while (++parser->row && (size = get_next_line(parser->fd, &line)) == OK)
 	{
 		row = parser->row;
 		parser->column = 0;
 		if (!line[parser->column] && !(parser->tokens &&
-		FT_QUETAIL(t_token, parser->tokens)->type == END_LINE))
-			add_token(parser, END_LINE);
+		FT_QUETAIL(t_token, parser->tokens)->type == NEW_LINE))
+			add_token(parser, NEW_LINE);
 		while (row == parser->row && line[parser->column])
 		{
 			pr_skip_space(parser, line);
@@ -139,8 +127,12 @@ int		parse(t_parse *parser)
 			if (line[parser->column])
 				pr_gettoken(parser, line);
 		}
+		if (GET_PTOKENS(parser, type, FT_QUETAIL) != NEW_LINE)
+			add_token(parser, END_LINE);
 		ft_strdel(&line);
 	}
-	show_tokens(parser);
-	return (OK);
+	if ((int)size == ERR)
+		error(ERR_READ_FILE);
+	if (size == END)
+		add_token(parser, END_FILE);
 }

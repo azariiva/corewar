@@ -6,7 +6,7 @@
 /*   By: fhilary <fhilary@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/08 19:53:09 by blinnea           #+#    #+#             */
-/*   Updated: 2020/08/16 20:28:23 by fhilary          ###   ########.fr       */
+/*   Updated: 2020/08/17 21:51:22 by fhilary          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,11 +21,8 @@
 #include "libft_get_next_line.h"
 # include "op.h"
 
-# define ERR_STR_INIT			"ERROR: Can\'t initialize string"
 # define ERR_PARSER_INIT		"ERROR: Can\'t initialize parser"
 # define ERR_TOKEN_INIT			"ERROR: Can\'t initialize token"
-# define ERR_LABEL_INIT			"ERROR: Can\'t initialize label"
-# define ERR_MENTION_INIT		"ERROR: Can\'t initialize mention"
 # define ERR_STATEMENT_INIT		"ERROR: Can\'t initialize statement"
 # define ERR_OPEN_FILE			"ERROR: Can\'t open file with champion"
 # define ERR_READ_FILE			"ERROR: Can\'t read file with champion"
@@ -35,7 +32,12 @@
 # define ERR_NO_NULL			"ERROR: No null control bytes"
 # define ERR_CODE_INIT			"ERROR: Can\'t initialize string of code"
 # define ERR_INVALID_CODE_SIZE	"ERROR: Invalid code size"
+
 # define LEXICAL_ERROR			"Lexical error at"
+# define ERR_LEN_STRING			"String too long (Max length 2048)"
+# define ERR_NAME_LEN			"Champion name too long (Max length 128)"
+# define ERR_COMMENT_LEN		"Champion comment too long (Max length 2048)"
+# define ERR_NO_NAME_OR_COMMENT	"Champion has no name or comment"
 
 typedef enum	e_type
 {
@@ -50,6 +52,7 @@ typedef enum	e_type
 	DIRECT,
 	STRING,
 	COMMAND,
+	NEW_LINE,
 	END_LINE,
 	END_FILE
 }				t_type;
@@ -66,6 +69,7 @@ static char	*g_typearr[] = {
 	"DIRECT",
 	"STRING",
 	"COMMAND",
+	"NEW_LINE",
 	"END_LINE",
 	"END_FILE"
 };
@@ -74,11 +78,17 @@ static char	*g_typearr[] = {
 
 typedef struct	s_token
 {
-	char			content[COMMENT_LENGTH];
-	t_type			type;
-	int				row;
-	int				column;
+	char	content[COMMENT_LENGTH];
+	t_type	type;
+	int		row;
+	int		column;
 }				t_token;
+
+typedef struct	s_lable
+{
+	char	*name;
+	int32_t	lab_pos;
+}				t_lable;
 
 typedef struct	s_parse
 {
@@ -98,7 +108,7 @@ char			*new_filename(char *file, char *type);
 
 void			add_token(t_parse *parser, t_type type);
 
-int				parse(t_parse *parser);
+void			parse(t_parse *parser);
 void			pr_skip_space(t_parse *parser, char *line);
 void			pr_skip_comment(t_parse *parser, char *line);
 void			pr_gettoken(t_parse *parser, char *line);
@@ -109,5 +119,13 @@ void			register_parse(t_parse *parser, char *line);
 int				register_len(t_parse *parser, char *line);
 void			other_parse(t_parse *parser, char *line);
 
-void			error(int row, int column, char *err);
+void			collection(t_parse *parser);
+
+void			syntax_error(t_parse *parser);
+void			lex_error(int row, int column);
+void			error(char *err);
+
+void			show_tokens(t_parse *parser);
+
+void			get_op_htable(t_htable *op_htable);
 #endif

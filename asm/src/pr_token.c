@@ -23,8 +23,8 @@ void			add_token(t_parse *parser, t_type type)
 void			pr_gettoken(t_parse *parser, char *line)
 {
 	if (line[parser->column] == '\n' &&
-	!(parser->tokens && FT_QUETAIL(t_token, parser->tokens)->type == END_LINE))
-		add_token(parser, END_LINE);
+	!(parser->tokens && FT_QUETAIL(t_token, parser->tokens)->type == NEW_LINE))
+		add_token(parser, NEW_LINE);
 	else if (line[parser->column] == SEPARATOR_CHAR)
 		add_token(parser, SEPARATOR);
 	else if (ft_strnstr(line, NAME_CMD_STRING, 5) &&
