@@ -6,7 +6,7 @@
 /*   By: fhilary <fhilary@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/08 19:53:09 by blinnea           #+#    #+#             */
-/*   Updated: 2020/08/17 21:51:22 by fhilary          ###   ########.fr       */
+/*   Updated: 2020/08/18 10:36:20 by fhilary          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -127,5 +127,5 @@ void			error(char *err);
 
 void			show_tokens(t_parse *parser);
 
-void			get_op_htable(t_htable *op_htable);
+t_htable		*get_op_htable(void);
 #endif

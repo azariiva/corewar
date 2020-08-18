@@ -73,9 +73,7 @@ typedef struct		s_asop
 	int			t_dir_size;
 }					t_asop;
 
-# ifndef OP_TAB
-#  define OP_TAB
-static const t_asop    op_tab[17] =
+static const t_asop    op_tab[16] =
 {
 	{
 		.name = "live",
@@ -204,16 +202,7 @@ static const t_asop    op_tab[17] =
 		.arg_types = {T_REG, 0, 0},
 		.arg_types_code = true,
 		.t_dir_size = 4
-	},
-	{
-		.name = NULL,
-		.bytecode = 0,
-		.arg_num = 0,
-		.arg_types_code = false,
-		.arg_types = {0, 0, 0},
-		.t_dir_size = 0
 	}
 };
-# endif
 
 #endif

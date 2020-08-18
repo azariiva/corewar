@@ -31,48 +31,34 @@ void	skip_new_line(t_list *tokens)
 		tokens = tokens->next;
 }
 
-void	lable_collect(t_parse *parser, t_list *tokens)
+void	test_htable(void)
 {
-	t_token		*command;
-	t_htable	op_htable;
-	// int			args;
+	t_token		test;
+	t_htable	*op_htable;
+	t_asop		*asop;
 
-	get_op_htable(&op_htable);
-	if (!ft_strcmp(FT_LSTCONT(t_token, tokens)->content, ft_htget(&op_htable, "sti")))
-	{
-		ft_printf("OK");
-	}
 
-	
-	command = FT_LSTCONT(t_token, ft_quepop(parser->tokens));
-	// if (command->type == END_LINE)
-	// {
-	// 	ft_quepop(parser->tokens);
-	// 	skip_new_line(parser);
-	// }
-	// if (command->type != INSTRUCTION)
-	// 	syntax_error(parser);
-	// while (GET_PTOKENS(parser, type, FT_QUEHEAD) != END_LINE)
-	// {
-	// 	if (token)
-	// 	{
+	op_htable = get_op_htable();
+	ft_bzero(&test, sizeof(t_token));
 
-	// 	}
-	// 	command = FT_LSTCONT(t_token, ft_quepop(parser->tokens));
-	// }
+	const char	*sti = "sti";
+	ft_strcpy(test.content, (char *)sti);
+	asop = ft_htget(op_htable, &test);
 }
-
 
 void	collection(t_parse *parser)
 {
 	t_list		*tokens;
 
+	// вот тест htable
+	test_htable();
+
+	// не стирай то, что ниже, мне это надо
 	info_collect(parser);
 	tokens = parser->tokens->head;
 	while (FT_LSTCONT(t_token, tokens)->type != END_FILE)
 	{
 		if (FT_LSTCONT(t_token, tokens)->type == INSTRUCTION)
-			lable_collect(parser, tokens);
 
 		tokens = tokens->next;
 	}
