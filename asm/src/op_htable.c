@@ -18,14 +18,12 @@ static unsigned long	hash(const void *tab, const size_t modulo)
 	return (ft_strhash(t->name, modulo));
 }
 
-t_htable				*get_op_htable(void)
+void					get_op_htable(t_parse *parser)
 {
 	size_t		i;
-	t_htable	*op_htable;
 
-	op_htable = ft_htnew((sizeof(op_tab) / sizeof(*op_tab)), cmp, hash);
+	parser->op_htable = ft_htnew((sizeof(op_tab) / sizeof(*op_tab)), cmp, hash);
 	i = -1;
 	while (++i < (sizeof(op_tab) / sizeof(*op_tab)))
-		ft_htadd(op_htable, op_tab + i, sizeof(*op_tab));
-	return (op_htable);
+		ft_htadd(parser->op_htable, op_tab + i, sizeof(*op_tab));
 }

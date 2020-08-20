@@ -2,16 +2,19 @@
 
 static void		execute(char *file)
 {
-	int		fdin;
 	t_parse	parser;
 
-	if (!(fdin = open(file, O_RDONLY)))
-		ft_printf("File open error\n");
 	ft_bzero(&parser, sizeof(t_parse));
-	parser.fd = fdin;
+	if (!(parser.fdin = open(file, O_RDONLY)))
+		ft_printf("File open error\n");
 	parse(&parser);
+	get_op_htable(&parser);
+	get_label_htable(&parser);
 	collection(&parser);
-	show_tokens(&parser);
+	if (!(parser.fdout = open(new_filename(file, ".cor"), O_CREAT | O_WRONLY | O_RDONLY)))
+		ft_printf("File create error\n");
+	translate(&parser);
+	// show_tokens(&parser);
 }
 
 int				main(int ac, char **av)

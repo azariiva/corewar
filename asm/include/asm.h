@@ -6,7 +6,7 @@
 /*   By: fhilary <fhilary@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/08 19:53:09 by blinnea           #+#    #+#             */
-/*   Updated: 2020/08/18 10:36:20 by fhilary          ###   ########.fr       */
+/*   Updated: 2020/08/20 19:55:42 by fhilary          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,9 @@
 # define ERR_NAME_LEN			"Champion name too long (Max length 128)"
 # define ERR_COMMENT_LEN		"Champion comment too long (Max length 2048)"
 # define ERR_NO_NAME_OR_COMMENT	"Champion has no name or comment"
+# define ERR_INVALID_INSTRUCT	"Invalid instruction"
+# define ERR_INVALID_PARAMETP	"Invalid parameter"
+# define ERR_SYNTAX				"Syntax error"
 
 typedef enum	e_type
 {
@@ -94,10 +97,15 @@ typedef struct	s_parse
 {
 	char		name[PROG_NAME_LENGTH];
 	char		comment[COMMENT_LENGTH];
-	int			fd;
+	int			fdin;
+	int			fdout;
 	int			row;
 	int			column;
 	t_queue		*tokens;
+	int32_t		position;
+	int			label_count;
+	t_htable	*op_htable;
+	t_htable	*lables_htable;
 }				t_parse;
 
 # define GET_TF(ts, f, HT) (HT(t_token, ts)->f)
@@ -119,13 +127,18 @@ void			register_parse(t_parse *parser, char *line);
 int				register_len(t_parse *parser, char *line);
 void			other_parse(t_parse *parser, char *line);
 
+void			instruction_collect(t_parse *parser, t_list **tokens);
 void			collection(t_parse *parser);
 
+void			translate(t_parse *parser);
+
+void			collection_error(char *type, t_list *token);
 void			syntax_error(t_parse *parser);
 void			lex_error(int row, int column);
 void			error(char *err);
 
 void			show_tokens(t_parse *parser);
 
-t_htable		*get_op_htable(void);
+void			get_label_htable(t_parse *parser);
+void			get_op_htable(t_parse *parser);
 #endif

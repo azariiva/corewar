@@ -6,7 +6,7 @@ void	string_parse(t_parse *parser, char *line)
 
 	line = line + parser->column;
 	while (!ft_strchr(line + 1, '\"') &&
-	get_next_line(parser->fd, &newline) == OK && ++parser->row)
+	get_next_line(parser->fdin, &newline) == OK && ++parser->row)
 	{
 		line = ft_strjoin(line, "\n");
 		line = ft_strjoin(line, newline);
@@ -55,26 +55,20 @@ int		register_len(t_parse *parser, char *line)
 	int		len;
 
 	len = parser->column + 1;
-	while (line[len] && !ft_isspace(line[len]) &&
-	ft_isdigit(line[len]))
-	{
+	while (line[len] && !ft_isspace(line[len]) && ft_isdigit(line[len]))
 		len++;
-	}
-	if (len - parser->column == 2)
-		return (len - parser->column + 1);
-	return (0);
+	return (len - parser->column);
 }
 
 void	register_parse(t_parse *parser, char *line)
 {
 	int		len;
 
-	len = register_len(parser, line) - 1;
+	len = register_len(parser, line);
 	GET_PTOKENS(parser, type, FT_QUETAIL) = REGISTER;
 	ft_strncpy(GET_PTOKENS(parser, content, FT_QUETAIL),
 	line + parser->column, len);
 	parser->column += len;
-	return ;
 }
 
 void	other_parse(t_parse *parser, char *line)
@@ -92,6 +86,7 @@ void	other_parse(t_parse *parser, char *line)
 	if (line[len] == ':')
 	{
 		GET_PTOKENS(parser, type, FT_QUETAIL) = LABEL;
+		parser->label_count++;
 		ft_strncpy(GET_PTOKENS(parser, content, FT_QUETAIL),
 		line + parser->column, len + 1 - parser->column);
 		parser->column += len + 1;
@@ -113,7 +108,7 @@ void	parse(t_parse *parser)
 	int		row;
 	size_t	size;
 
-	while (++parser->row && (size = get_next_line(parser->fd, &line)) == OK)
+	while (++parser->row && (size = get_next_line(parser->fdin, &line)) == OK)
 	{
 		row = parser->row;
 		parser->column = 0;

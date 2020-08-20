@@ -1,7 +1,9 @@
-.name           "42"
-.comment        "Just a basic Winner Program"
+.name       "Batman"
+.comment    "This city needs me"
 
-l2:	sti	r1,%:451645,%0
-	and	r1,%456456,r1
-live:	live	%1
-	zjmp	%:live
+loop:
+        sti r1, %:live, %1
+live:
+        live %0
+        ld %0, r2
+        zjmp %:loop

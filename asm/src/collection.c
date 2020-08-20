@@ -25,41 +25,80 @@ void	info_collect(t_parse *parser)
 		error(ERR_NO_NAME_OR_COMMENT);
 }
 
-void	skip_new_line(t_list *tokens)
+void	skip_new_line(t_list **tokens)
 {
-	while (tokens && FT_LSTCONT(t_token, tokens)->type == NEW_LINE)
-		tokens = tokens->next;
+	while (*tokens && FT_LSTCONT(t_token, *tokens)->type == NEW_LINE)
+		*tokens = (*tokens)->next;
 }
 
-void	test_htable(void)
+int		get_arg_type(t_list *token)
 {
-	t_token		test;
-	t_htable	*op_htable;
-	t_asop		*asop;
+	if (FT_LSTCONT(t_token, token)->type == INDIRECT)
+		return (T_IND);
+	else if (FT_LSTCONT(t_token, token)->type == REGISTER)
+		return (T_REG);
+	else if (FT_LSTCONT(t_token, token)->type == DIRECT_LABEL ||
+	FT_LSTCONT(t_token, token)->type == DIRECT)
+		return (T_DIR);
+	return (0);
+}
 
+void	instruction_collect(t_parse *parser, t_list **tokens)
+{
+	t_asop	*asop;
+	t_asop	op_name;
+	int		arg_num;
+	int		type;
 
-	op_htable = get_op_htable();
-	ft_bzero(&test, sizeof(t_token));
-
-	const char	*sti = "sti";
-	ft_strcpy(test.content, (char *)sti);
-	asop = ft_htget(op_htable, &test);
+	ft_bzero(&op_name, sizeof(t_asop));
+	op_name.name = FT_LSTCONT(t_token, *tokens)->content;
+	if (!(asop = ft_htget(parser->op_htable, &op_name)))
+		collection_error(ERR_INVALID_INSTRUCT, *tokens);
+	parser->position++;
+	if (asop->arg_types_code)
+		parser->position++;
+	arg_num = -1;
+	while (++arg_num < asop->arg_num)
+	{
+		*tokens = (*tokens)->next;
+		type = get_arg_type(*tokens);
+		if (!(asop->arg_types[arg_num] & type))
+			collection_error(ERR_INVALID_PARAMETP, *tokens);
+		if (type & T_DIR)
+			parser->position += asop->t_dir_size;
+		else if (type & T_IND)
+			parser->position += T_IND;
+		else if (type & T_REG)
+			parser->position += T_REG;
+		*tokens = (*tokens)->next;
+		if (FT_LSTCONT(t_token, *tokens)->type != SEPARATOR &&
+		FT_LSTCONT(t_token, *tokens)->type != END_LINE)
+			collection_error(ERR_SYNTAX, *tokens);
+	}
 }
 
 void	collection(t_parse *parser)
 {
 	t_list		*tokens;
+	t_lable		lable_name;
 
-	// вот тест htable
-	test_htable();
-
-	// не стирай то, что ниже, мне это надо
 	info_collect(parser);
 	tokens = parser->tokens->head;
 	while (FT_LSTCONT(t_token, tokens)->type != END_FILE)
 	{
+		if (FT_LSTCONT(t_token, tokens)->type == LABEL)
+		{
+			ft_bzero(&lable_name, sizeof(t_lable));
+			lable_name.name = FT_LSTCONT(t_token, tokens)->content;
+			((t_lable *)ft_htget(parser->lables_htable, &lable_name))->lab_pos =
+			parser->position;
+			tokens = tokens->next;
+			if (FT_LSTCONT(t_token, tokens)->type == END_LINE)
+				tokens = tokens->next;
+			skip_new_line(&tokens);
+		}
 		if (FT_LSTCONT(t_token, tokens)->type == INSTRUCTION)
-
+			instruction_collect(parser, &tokens);
 		tokens = tokens->next;
 	}
 }
