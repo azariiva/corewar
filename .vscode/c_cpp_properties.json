@@ -4,7 +4,7 @@
             "name": "Linux",
             "includePath": [
 				"${workspaceFolder}/asm/include",
-				"${workspaceFolder}/visualiser/include",
+				"${workspaceFolder}/visualizer/include",
 				"${workspaceFolder}/vm/include",
                 "${workspaceFolder}/libft/include"
             ],
