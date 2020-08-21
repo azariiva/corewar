@@ -95,10 +95,12 @@ void	collection(t_parse *parser)
 			tokens = tokens->next;
 			if (FT_LSTCONT(t_token, tokens)->type == END_LINE)
 				tokens = tokens->next;
-			skip_new_line(&tokens);
 		}
+		skip_new_line(&tokens);
 		if (FT_LSTCONT(t_token, tokens)->type == INSTRUCTION)
 			instruction_collect(parser, &tokens);
+		else
+			collection_error(parser, &tokens);
 		tokens = tokens->next;
 	}
 }

@@ -6,7 +6,7 @@
 /*   By: fhilary <fhilary@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/08 19:53:09 by blinnea           #+#    #+#             */
-/*   Updated: 2020/08/20 19:55:42 by fhilary          ###   ########.fr       */
+/*   Updated: 2020/08/21 20:02:34 by fhilary          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,6 +97,7 @@ typedef struct	s_parse
 {
 	char		name[PROG_NAME_LENGTH];
 	char		comment[COMMENT_LENGTH];
+	char		code[CHAMP_MAX_SIZE];
 	int			fdin;
 	int			fdout;
 	int			row;
@@ -130,7 +131,7 @@ void			other_parse(t_parse *parser, char *line);
 void			instruction_collect(t_parse *parser, t_list **tokens);
 void			collection(t_parse *parser);
 
-void			translate(t_parse *parser);
+void			to_bytecode(t_parse *parser);
 
 void			collection_error(char *type, t_list *token);
 void			syntax_error(t_parse *parser);

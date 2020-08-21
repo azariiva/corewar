@@ -36,7 +36,7 @@ void	str_translate(char **bytecode, char *str)
 	}
 }
 
-void	translate(t_parse *parser)
+void	to_bytecode(t_parse *parser)
 {
 	char	*bytecode;
 
