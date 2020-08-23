@@ -6,7 +6,7 @@
 /*   By: blinnea <blinnea@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/20 15:23:48 by blinnea           #+#    #+#             */
-/*   Updated: 2020/08/20 17:48:41 by blinnea          ###   ########.fr       */
+/*   Updated: 2020/08/23 15:09:13 by blinnea          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ static bool			init_champ(t_player *p)
 
 	if ((fd = open(p->fname, O_RDONLY)) < 0)
 		return (false);
-	if (rread(fd, &buff, 4) != 4 || buff != 0x00ea83f3 /* Magic Header*/)
+	if (rread(fd, &buff, 4) != 4 || buff != COREWAR_EXEC_MAGIC /* Magic Header*/)
 		return (close(fd) & false);
 	if (read(fd, p->name, PROG_NAME_LENGTH) != PROG_NAME_LENGTH || /* Name */
 		read(fd, &buff, 4) != 4 || buff || /* NULL */
