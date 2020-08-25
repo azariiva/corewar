@@ -6,7 +6,7 @@
 /*   By: blinnea <blinnea@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/15 18:00:13 by blinnea           #+#    #+#             */
-/*   Updated: 2020/08/23 15:14:25 by blinnea          ###   ########.fr       */
+/*   Updated: 2020/08/25 14:57:29 by blinnea          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,14 @@ struct					s_player
 	int			idx;
 };
 
-t_player				*read_champs(t_acav acav);
-bool					init_champs(t_player *pls);
+typedef struct			s_vm
+{
+	t_player	pls[MAX_PLAYERS];
+	size_t		psize;
+	u_int8_t	body[MEM_SIZE];
+}						t_vm;
+
+void					read_champs(t_vm *vm, t_acav acav);
+bool					init_champs(t_vm *vm);
 
 #endif

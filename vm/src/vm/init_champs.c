@@ -6,7 +6,7 @@
 /*   By: blinnea <blinnea@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/20 15:23:48 by blinnea           #+#    #+#             */
-/*   Updated: 2020/08/23 15:09:13 by blinnea          ###   ########.fr       */
+/*   Updated: 2020/08/25 15:53:35 by blinnea          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,13 +53,13 @@ static bool			init_champ(t_player *p)
 	return (close(fd) | true);
 }
 
-bool				init_champs(t_player *pls)
+bool				init_champs(t_vm *vm)
 {
 	uint32_t	i;
 
-	i = -1;
-	while (++i < MAX_PLAYERS && pls[i].idx)
-		if (!init_champ(pls + i))
+	i = 0;
+	while (i < vm->psize)
+		if (!init_champ(vm->pls + i++))
 			return (false);
 	return (true);
 }

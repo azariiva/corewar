@@ -6,7 +6,7 @@
 /*   By: blinnea <blinnea@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/15 18:12:50 by blinnea           #+#    #+#             */
-/*   Updated: 2020/08/23 15:19:30 by blinnea          ###   ########.fr       */
+/*   Updated: 2020/08/25 15:57:07 by blinnea          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,10 +15,9 @@
 #include <unistd.h>
 #include <stdbool.h>
 
-inline static void	add_champ(char *fname, int idx, t_player *players)
+inline static void	add_champ(char *fname, int idx, t_vm *vm)
 {
-	static bool		occidxs[MAX_PLAYERS];
-	static int		pidx;
+	static bool		occidxs[MAX_PLAYERS + 1];
 
 	if (idx < 1 || idx > MAX_PLAYERS || occidxs[idx] == true)
 	{
@@ -26,8 +25,8 @@ inline static void	add_champ(char *fname, int idx, t_player *players)
 		while (occidxs[idx] == true)
 			++idx;
 	}
-	players[pidx].idx = idx + 1;
-	players[pidx++].fname = fname;
+	vm->pls[vm->psize].idx = idx;
+	vm->pls[vm->psize++].fname = fname;
 	occidxs[idx] = true;
 }
 
@@ -45,13 +44,11 @@ static int			cmp(const void *a, const void *b)
 /*
 ** TODO: add option for visualizer
 */
-t_player			*read_champs(t_acav acav)
-{
-	static t_player	players[MAX_PLAYERS];
-	int				c;
-	int				pidx;
 
-	pidx = 0;
+void				read_champs(t_vm *vm, t_acav acav)
+{
+	int		c;
+
 	while (1)
 	{
 		if ((c = ft_getopt(acav, ":n:")) == -1)
@@ -59,10 +56,7 @@ t_player			*read_champs(t_acav acav)
 			if (acav.av[g_optind] == NULL)
 				break;
 			else
-			{
-				add_champ(acav.av[g_optind++], 1, players);
-				pidx++;
-			}
+				add_champ(acav.av[g_optind++], 0, vm);
 		}
 		else if (c == ':')
 		{
@@ -72,10 +66,7 @@ t_player			*read_champs(t_acav acav)
 		else if (c == 'n')
 		{
 			if (ft_strisnum(g_optarg))
-			{
-				add_champ(acav.av[++g_optind], ft_atoi(g_optarg), players);
-				pidx++;
-			}
+				add_champ(acav.av[g_optind++], ft_atoi(g_optarg), vm);
 			else
 			{
 				/*
@@ -86,6 +77,5 @@ t_player			*read_champs(t_acav acav)
 			}
 		}
 	}
-	FT_QUICKSORT(players, pidx, cmp);
-	return (players);
+	FT_QUICKSORT(vm->pls, vm->psize, cmp);
 }

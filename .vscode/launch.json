@@ -10,7 +10,7 @@
 				"request": "launch",
 				"preLaunchTask": "build",
 				"program": "${workspaceFolder}/vm/corewar",
-				"args": ["-n", "3", "/Users/blinnea/Desktop/corewar/vm/kamelkaze.cor"],
+				"args": ["-n", "3", "/Users/blinnea/Desktop/corewar/vm/kamelkaze.cor", "-n", "2", "/Users/blinnea/Desktop/corewar/vm/Gagnant.cor"],
 				"stopAtEntry": false,
 				"cwd": "${workspaceFolder}",
 				"environment": [],
