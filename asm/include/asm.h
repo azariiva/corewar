@@ -6,7 +6,7 @@
 /*   By: fhilary <fhilary@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/08 19:53:09 by blinnea           #+#    #+#             */
-/*   Updated: 2020/08/21 20:02:34 by fhilary          ###   ########.fr       */
+/*   Updated: 2020/08/25 11:36:03 by fhilary          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -131,15 +131,13 @@ void			other_parse(t_parse *parser, char *line);
 void			instruction_collect(t_parse *parser, t_list **tokens);
 void			collection(t_parse *parser);
 
-void			to_bytecode(t_parse *parser);
-
-void			collection_error(char *type, t_list *token);
-void			syntax_error(t_parse *parser);
+void			collection_error(char *type, t_token *token);
 void			lex_error(int row, int column);
 void			error(char *err);
 
 void			show_tokens(t_parse *parser);
 
+int				get_arg_type(t_token *token);
 void			get_label_htable(t_parse *parser);
 void			get_op_htable(t_parse *parser);
 #endif

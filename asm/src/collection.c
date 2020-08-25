@@ -31,14 +31,13 @@ void	skip_new_line(t_list **tokens)
 		*tokens = (*tokens)->next;
 }
 
-int		get_arg_type(t_list *token)
+int		get_arg_type(t_token *token)
 {
-	if (FT_LSTCONT(t_token, token)->type == INDIRECT)
+	if (token->type == INDIRECT)
 		return (T_IND);
-	else if (FT_LSTCONT(t_token, token)->type == REGISTER)
+	else if (token->type == REGISTER)
 		return (T_REG);
-	else if (FT_LSTCONT(t_token, token)->type == DIRECT_LABEL ||
-	FT_LSTCONT(t_token, token)->type == DIRECT)
+	else if (token->type == DIRECT_LABEL || token->type == DIRECT)
 		return (T_DIR);
 	return (0);
 }
@@ -53,7 +52,7 @@ void	instruction_collect(t_parse *parser, t_list **tokens)
 	ft_bzero(&op_name, sizeof(t_asop));
 	op_name.name = FT_LSTCONT(t_token, *tokens)->content;
 	if (!(asop = ft_htget(parser->op_htable, &op_name)))
-		collection_error(ERR_INVALID_INSTRUCT, *tokens);
+		collection_error(ERR_INVALID_INSTRUCT, FT_LSTCONT(t_token, *tokens));
 	parser->position++;
 	if (asop->arg_types_code)
 		parser->position++;
@@ -61,9 +60,9 @@ void	instruction_collect(t_parse *parser, t_list **tokens)
 	while (++arg_num < asop->arg_num)
 	{
 		*tokens = (*tokens)->next;
-		type = get_arg_type(*tokens);
+		type = get_arg_type(FT_LSTCONT(t_token, *tokens));
 		if (!(asop->arg_types[arg_num] & type))
-			collection_error(ERR_INVALID_PARAMETP, *tokens);
+			collection_error(ERR_INVALID_PARAMETP, FT_LSTCONT(t_token, *tokens));
 		if (type & T_DIR)
 			parser->position += asop->t_dir_size;
 		else if (type & T_IND)
@@ -73,7 +72,7 @@ void	instruction_collect(t_parse *parser, t_list **tokens)
 		*tokens = (*tokens)->next;
 		if (FT_LSTCONT(t_token, *tokens)->type != SEPARATOR &&
 		FT_LSTCONT(t_token, *tokens)->type != END_LINE)
-			collection_error(ERR_SYNTAX, *tokens);
+			collection_error(ERR_SYNTAX, FT_LSTCONT(t_token, *tokens));
 	}
 }
 
@@ -100,7 +99,7 @@ void	collection(t_parse *parser)
 		if (FT_LSTCONT(t_token, tokens)->type == INSTRUCTION)
 			instruction_collect(parser, &tokens);
 		else
-			collection_error(parser, &tokens);
+			collection_error(parser, FT_LSTCONT(t_token, tokens));
 		tokens = tokens->next;
 	}
 }
