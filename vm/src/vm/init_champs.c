@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init_champs.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: blinnea <blinnea@student.42.fr>            +#+  +:+       +#+        */
+/*   By: torange <@student.42.fr>                   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/20 15:23:48 by blinnea           #+#    #+#             */
-/*   Updated: 2020/08/25 15:53:35 by blinnea          ###   ########.fr       */
+/*   Updated: 2020/08/25 17:41:46 by torange          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,16 +40,21 @@ static bool			init_champ(t_player *p)
 	uint32_t	champ_size;
 
 	if ((fd = open(p->fname, O_RDONLY)) < 0)
-		return (false);
-	if (rread(fd, &buff, 4) != 4 || buff != COREWAR_EXEC_MAGIC /* Magic Header*/)
-		return (close(fd) & false);
-	if (read(fd, p->name, PROG_NAME_LENGTH) != PROG_NAME_LENGTH || /* Name */
-		read(fd, &buff, 4) != 4 || buff || /* NULL */
-		rread(fd, &champ_size, 4) != 4 || champ_size > CHAMP_MAX_SIZE || /* Champ Size */
-		read(fd, p->comment, COMMENT_LENGTH) != COMMENT_LENGTH || /* Comment */
-		read(fd, &buff, 4) != 4 || buff || /* NULL */
-		read(fd, p->exec, champ_size) != champ_size /* Executable Code */)
-		return (close(fd) & false);
+		return (ft_printf("Error: open\n") && false);
+	if (rread(fd, &buff, 4) != 4 || buff != COREWAR_EXEC_MAGIC)
+		return (ft_printf("Error: Magic Header\n") && (close(fd) & false));
+	if (read(fd, p->name, PROG_NAME_LENGTH) != PROG_NAME_LENGTH)
+		return (ft_printf("Error: Name\n") && (close(fd) & false));
+	if (read(fd, &buff, 4) != 4 || buff)
+		return (ft_printf("Error: NULL\n") && (close(fd) & false));
+	if (rread(fd, &champ_size, 4) != 4 || champ_size > CHAMP_MAX_SIZE)
+		return (ft_printf("Error: Champ Size\n") && (close(fd) & false) );
+	if (read(fd, p->comment, COMMENT_LENGTH) != COMMENT_LENGTH)
+		return (ft_printf("Error: Comment\n") && (close(fd) & false));
+	if (read(fd, &buff, 4) != 4 || buff)
+		return (ft_printf("Error: NULL\n") && (close(fd) & false));
+	if (read(fd, p->exec, champ_size) != champ_size)
+		return (ft_printf("Error: Executable Code\n") && (close(fd) & false));
 	return (close(fd) | true);
 }
 
@@ -61,5 +66,11 @@ bool				init_champs(t_vm *vm)
 	while (i < vm->psize)
 		if (!init_champ(vm->pls + i++))
 			return (false);
+	return (true);
+}
+
+bool				init_body(t_vm *vm)
+{
+	ft_bzero(vm->body, MEM_SIZE);
 	return (true);
 }

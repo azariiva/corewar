@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   vm.h                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: blinnea <blinnea@student.42.fr>            +#+  +:+       +#+        */
+/*   By: torange <@student.42.fr>                   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/15 18:00:13 by blinnea           #+#    #+#             */
-/*   Updated: 2020/08/25 14:57:29 by blinnea          ###   ########.fr       */
+/*   Updated: 2020/08/25 17:26:11 by torange          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,5 +48,7 @@ typedef struct			s_vm
 
 void					read_champs(t_vm *vm, t_acav acav);
 bool					init_champs(t_vm *vm);
+bool					init_body(t_vm *vm);
+bool					init_body(t_vm *vm);
 
 #endif
