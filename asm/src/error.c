@@ -37,5 +37,12 @@ void	collection_error(char *type, t_token *token)
 		token->row, token->column,
 		token->content);
 	}
+	else if (type == ERR_INVALID_LABLE)
+	{
+		ft_printf_fd(STDERR_FILENO,
+		"No such label [TOKEN][%d:%d] %s\n",
+		token->row, token->column,
+		token->content);
+	}
 	exit(1);
 }

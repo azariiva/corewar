@@ -6,7 +6,7 @@
 /*   By: fhilary <fhilary@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/08 19:53:09 by blinnea           #+#    #+#             */
-/*   Updated: 2020/08/25 11:36:03 by fhilary          ###   ########.fr       */
+/*   Updated: 2020/08/27 17:27:30 by fhilary          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,7 @@
 # define ERR_INVALID_INSTRUCT	"Invalid instruction"
 # define ERR_INVALID_PARAMETP	"Invalid parameter"
 # define ERR_SYNTAX				"Syntax error"
+# define ERR_INVALID_LABLE		"Invalid lable"
 
 typedef enum	e_type
 {
@@ -85,19 +86,29 @@ typedef struct	s_token
 	t_type	type;
 	int		row;
 	int		column;
+	int		position;
 }				t_token;
 
 typedef struct	s_lable
 {
-	char	*name;
+	char	name[CHAMP_MAX_SIZE];
 	int32_t	lab_pos;
+	int		mentions[CHAMP_MAX_SIZE];
+	int		size;
+	int		m_position;
 }				t_lable;
+
+typedef struct	s_code
+{
+	int			content[CHAMP_MAX_SIZE];
+	int			position;
+}				t_code;
 
 typedef struct	s_parse
 {
 	char		name[PROG_NAME_LENGTH];
 	char		comment[COMMENT_LENGTH];
-	char		code[CHAMP_MAX_SIZE];
+	t_code		*code;
 	int			fdin;
 	int			fdout;
 	int			row;
@@ -106,7 +117,7 @@ typedef struct	s_parse
 	int32_t		position;
 	int			label_count;
 	t_htable	*op_htable;
-	t_htable	*lables_htable;
+	t_htable	*lables;
 }				t_parse;
 
 # define GET_TF(ts, f, HT) (HT(t_token, ts)->f)
@@ -134,6 +145,8 @@ void			collection(t_parse *parser);
 void			collection_error(char *type, t_token *token);
 void			lex_error(int row, int column);
 void			error(char *err);
+
+void			shaping(t_parse *parser);
 
 void			show_tokens(t_parse *parser);
 

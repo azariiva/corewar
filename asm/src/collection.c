@@ -42,18 +42,33 @@ int		get_arg_type(t_token *token)
 	return (0);
 }
 
+void	mention_collect(t_parse *parser, t_token *token, int inst_pos)
+{
+	t_lable	*lable;
+	t_lable	lable_name;
+
+	if (token->type == DIRECT_LABEL)
+	{
+		ft_bzero(&lable_name, sizeof(t_lable));
+		ft_strcat(lable_name.name, token->content + 2);
+		lable = ft_htget(parser->lables, &lable_name);
+		lable->mentions[lable->size++] = inst_pos;
+	}
+}
+
 void	instruction_collect(t_parse *parser, t_list **tokens)
 {
 	t_asop	*asop;
 	t_asop	op_name;
 	int		arg_num;
 	int		type;
+	int		inst_pos;
 
 	ft_bzero(&op_name, sizeof(t_asop));
 	op_name.name = FT_LSTCONT(t_token, *tokens)->content;
 	if (!(asop = ft_htget(parser->op_htable, &op_name)))
 		collection_error(ERR_INVALID_INSTRUCT, FT_LSTCONT(t_token, *tokens));
-	parser->position++;
+	inst_pos = parser->position++;
 	if (asop->arg_types_code)
 		parser->position++;
 	arg_num = -1;
@@ -64,7 +79,10 @@ void	instruction_collect(t_parse *parser, t_list **tokens)
 		if (!(asop->arg_types[arg_num] & type))
 			collection_error(ERR_INVALID_PARAMETP, FT_LSTCONT(t_token, *tokens));
 		if (type & T_DIR)
+		{
+			mention_collect(parser, FT_LSTCONT(t_token, *tokens), inst_pos);
 			parser->position += asop->t_dir_size;
+		}
 		else if (type & T_IND)
 			parser->position += T_IND;
 		else if (type & T_REG)
@@ -85,21 +103,23 @@ void	collection(t_parse *parser)
 	tokens = parser->tokens->head;
 	while (FT_LSTCONT(t_token, tokens)->type != END_FILE)
 	{
+		skip_new_line(&tokens);
 		if (FT_LSTCONT(t_token, tokens)->type == LABEL)
 		{
 			ft_bzero(&lable_name, sizeof(t_lable));
-			lable_name.name = FT_LSTCONT(t_token, tokens)->content;
-			((t_lable *)ft_htget(parser->lables_htable, &lable_name))->lab_pos =
+			ft_strncat(lable_name.name, FT_LSTCONT(t_token, tokens)->content,
+			ft_strlen(FT_LSTCONT(t_token, tokens)->content) - 1);
+			((t_lable *)ft_htget(parser->lables, &lable_name))->lab_pos =
 			parser->position;
 			tokens = tokens->next;
 			if (FT_LSTCONT(t_token, tokens)->type == END_LINE)
 				tokens = tokens->next;
+			skip_new_line(&tokens);
 		}
-		skip_new_line(&tokens);
 		if (FT_LSTCONT(t_token, tokens)->type == INSTRUCTION)
 			instruction_collect(parser, &tokens);
 		else
-			collection_error(parser, FT_LSTCONT(t_token, tokens));
+			collection_error(ERR_INVALID_INSTRUCT, FT_LSTCONT(t_token, tokens));
 		tokens = tokens->next;
 	}
 }

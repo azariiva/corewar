@@ -23,16 +23,21 @@ void					get_label_htable(t_parse *parser)
 	t_list		*tokens;
 	t_lable		lable;
 
-	parser->lables_htable = ft_htnew(parser->label_count, cmp, hash);
+	parser->lables = ft_htnew(parser->label_count, cmp, hash);
 	tokens = parser->tokens->head;
 	while (tokens)
 	{
 		if (FT_LSTCONT(t_token, tokens)->type == LABEL)
 		{
-			lable.name = FT_LSTCONT(t_token, tokens)->content;
+			ft_bzero(&lable, sizeof(lable));
+			ft_strncat(lable.name, FT_LSTCONT(t_token, tokens)->content,
+			ft_strlen(FT_LSTCONT(t_token, tokens)->content) - 1);
 			lable.lab_pos = 0;
-			ft_htadd(parser->lables_htable, &lable, sizeof(lable));
+			lable.size = 0;
+			lable.m_position = 0;
+			ft_htadd(parser->lables, &lable, sizeof(lable));
 		}
 		tokens = tokens->next;
 	}
 }
+
