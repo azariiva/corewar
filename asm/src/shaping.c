@@ -1,6 +1,18 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   shaping.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: fhilary <fhilary@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2020/08/28 14:17:55 by fhilary           #+#    #+#             */
+/*   Updated: 2020/08/28 20:33:33 by fhilary          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "asm.h"
-
-
+#include <unistd.h>
+#include <limits.h>
 
 int		get_arg_type_code(t_parse *parser)
 {
@@ -29,12 +41,23 @@ int		get_arg_type_code(t_parse *parser)
 	return (x);
 }
 
-void	add_elem(t_parse *parser, int elem)
+void	wwrite(t_parse *parser, int n, int size)
 {
-	parser->code->content[parser->code->position++] = elem;
+	short	n1;
+
+	if (size == 2)
+	{
+		n1 = (short)n;
+		n1 = REV_2(n1);
+		write(parser->fdout, &n1, size);
+		return ;
+	}
+	if (size == 4)
+		n = REV_4(n);
+	write(parser->fdout, &n, size);
 }
 
-void	dir_shape(t_parse *parser, t_token *token)
+void	dir_shape(t_parse *parser, t_token *token, t_asop *asop)
 {
 	t_lable	*lable;
 	t_lable	lable_name;
@@ -43,12 +66,12 @@ void	dir_shape(t_parse *parser, t_token *token)
 	{
 		ft_bzero(&lable_name, sizeof(t_lable));
 		ft_strcat(lable_name.name, token->content + 2);
-		if (!(lable = ft_htget(parser->lables, &lable_name)))
-			collection_error(ERR_INVALID_LABLE, token);
-		add_elem(parser, lable->lab_pos - lable->mentions[lable->m_position++]);
+		lable = ft_htget(parser->lables, &lable_name);
+		wwrite(parser, lable->lab_pos - lable->mentions[lable->m_position++],
+		asop->t_dir_size);
 	}
 	else if (token->type == DIRECT)
-		add_elem(parser, ft_atoi(&token->content[1]));
+		wwrite(parser, ft_atoi(&token->content[1]), asop->t_dir_size);
 }
 
 void	instruct_shape(t_parse *parser, t_token *token)
@@ -61,23 +84,22 @@ void	instruct_shape(t_parse *parser, t_token *token)
 	ft_bzero(&op_name, sizeof(t_asop));
 	op_name.name = token->content;
 	asop = ft_htget(parser->op_htable, &op_name);
-	add_elem(parser, asop->bytecode);
+	write(parser->fdout, &asop->bytecode, 1);
 	if (asop->arg_types_code)
-		add_elem(parser, get_arg_type_code(parser));
+	{
+		x = get_arg_type_code(parser);
+		write(parser->fdout, &x, 1);
+	}
 	while ((token = FT_LSTCONT(t_token, ft_quepop(parser->tokens)))->type !=
 	END_LINE)
 	{
 		type = get_arg_type(token);
 		if (type & T_REG)
-		{
-			x = ft_atoi(&token->content[1]);
-			x &= 0xff;
-			add_elem(parser, x);
-		}
+			wwrite(parser, ft_atoi(&token->content[1]), 1);
 		else if (type & T_DIR)
-			dir_shape(parser, token);
+			dir_shape(parser, token, asop);
 		else if (type & T_IND)
-			add_elem(parser, ft_atoi(token->content));
+			wwrite(parser, ft_atoi(token->content), 2);
 	}
 }
 
@@ -85,8 +107,12 @@ void	shaping(t_parse *parser)
 {
 	t_token	*token;
 
-	parser->code = ft_memalloc(sizeof(t_code));
-	ft_bzero(parser->code, sizeof(t_code));
+	wwrite(parser, COREWAR_EXEC_MAGIC, 4);
+	write(parser->fdout, parser->name, sizeof(parser->name));
+	wwrite(parser, 0, 4);
+	wwrite(parser, parser->position, 4);
+	write(parser->fdout, parser->comment, sizeof(parser->comment));
+	wwrite(parser, 0, 4);
 	while ((token = FT_LSTCONT(t_token, ft_quepop(parser->tokens)))->type !=
 	END_FILE)
 	{

@@ -11,6 +11,8 @@ void	info_collect(t_parse *parser)
 		ft_strcpy(parser->name,
 		FT_LSTCONT(t_token, ft_quepop(parser->tokens))->content);
 		ft_quepop(parser->tokens);
+		while (GET_PTOKENS(parser, type, FT_QUEHEAD) == NEW_LINE)
+			ft_quepop(parser->tokens);
 		info_collect(parser);
 	}
 	else if (GET_PTOKENS(parser, type, FT_QUEHEAD) == COMMAND_COMMENT)
@@ -19,6 +21,8 @@ void	info_collect(t_parse *parser)
 		ft_strcpy(parser->comment,
 		FT_LSTCONT(t_token, ft_quepop(parser->tokens))->content);
 		ft_quepop(parser->tokens);
+		while (GET_PTOKENS(parser, type, FT_QUEHEAD) == NEW_LINE)
+			ft_quepop(parser->tokens);
 		info_collect(parser);
 	}
 	else if (!*parser->name || !*parser->comment)
@@ -51,7 +55,8 @@ void	mention_collect(t_parse *parser, t_token *token, int inst_pos)
 	{
 		ft_bzero(&lable_name, sizeof(t_lable));
 		ft_strcat(lable_name.name, token->content + 2);
-		lable = ft_htget(parser->lables, &lable_name);
+		if (!(lable = ft_htget(parser->lables, &lable_name)))
+			collection_error(ERR_INVALID_LABLE, token);
 		lable->mentions[lable->size++] = inst_pos;
 	}
 }
@@ -84,9 +89,9 @@ void	instruction_collect(t_parse *parser, t_list **tokens)
 			parser->position += asop->t_dir_size;
 		}
 		else if (type & T_IND)
-			parser->position += T_IND;
+			parser->position += 2;
 		else if (type & T_REG)
-			parser->position += T_REG;
+			parser->position += 1;
 		*tokens = (*tokens)->next;
 		if (FT_LSTCONT(t_token, *tokens)->type != SEPARATOR &&
 		FT_LSTCONT(t_token, *tokens)->type != END_LINE)
@@ -98,6 +103,7 @@ void	collection(t_parse *parser)
 {
 	t_list		*tokens;
 	t_lable		lable_name;
+	t_lable		*lable;
 
 	info_collect(parser);
 	tokens = parser->tokens->head;
@@ -109,6 +115,7 @@ void	collection(t_parse *parser)
 			ft_bzero(&lable_name, sizeof(t_lable));
 			ft_strncat(lable_name.name, FT_LSTCONT(t_token, tokens)->content,
 			ft_strlen(FT_LSTCONT(t_token, tokens)->content) - 1);
+			lable = ft_htget(parser->lables, &lable_name);
 			((t_lable *)ft_htget(parser->lables, &lable_name))->lab_pos =
 			parser->position;
 			tokens = tokens->next;

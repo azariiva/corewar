@@ -51,7 +51,7 @@ void			pr_gettoken(t_parse *parser, char *line)
 			number_parse(parser, line);
 		}
 	}
-	else if (line[parser->column] == 'r' && register_len(parser, line) == 2)
+	else if (line[parser->column] == 'r' && register_len(parser, line))
 	{
 		add_token(parser, REGISTER);
 		register_parse(parser, line);

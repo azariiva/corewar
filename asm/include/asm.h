@@ -6,7 +6,7 @@
 /*   By: fhilary <fhilary@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/08 19:53:09 by blinnea           #+#    #+#             */
-/*   Updated: 2020/08/27 17:27:30 by fhilary          ###   ########.fr       */
+/*   Updated: 2020/08/28 18:13:20 by fhilary          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,6 +80,13 @@ static char	*g_typearr[] = {
 
 # define TSTR(T) (g_typearr[T])
 
+# define REV_4(n) ((n >> 24) & 0x000000FF) | ((n >> 8) & 0x0000FF00) | \
+((n << 8) & 0x00FF0000) | ((n << 24) & 0xFF000000)
+# define REV_2(n) (((n >> 8) & 0x00FF) | \
+((n << 8) & 0xFF00))
+
+# define MOV(n) ( (n << 16) | ((n >> 8) << 24) )
+
 typedef struct	s_token
 {
 	char	content[COMMENT_LENGTH];
@@ -98,17 +105,10 @@ typedef struct	s_lable
 	int		m_position;
 }				t_lable;
 
-typedef struct	s_code
-{
-	int			content[CHAMP_MAX_SIZE];
-	int			position;
-}				t_code;
-
 typedef struct	s_parse
 {
 	char		name[PROG_NAME_LENGTH];
 	char		comment[COMMENT_LENGTH];
-	t_code		*code;
 	int			fdin;
 	int			fdout;
 	int			row;
