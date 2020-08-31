@@ -35,12 +35,17 @@ void	number_parse(t_parse *parser, char *line)
 	parser->column = len;
 }
 
+int		is_symbol(char c)
+{
+	return ((c >= 'a' && c <= 'z') || (c >= '0' && c <= '9') || (c == '_'));
+}
+
 void	lable_parse(t_parse *parser, char *line)
 {
 	int		len;
 
 	len = parser->column + 2;
-	while (line[len] && (line[len] == '_' || ft_isalpha(line[len]) || ft_isdigit(line[len])))
+	while (line[len] && is_symbol(line[len]))
 		len++;
 	if (line[len] && !ft_isspace(line[len]) && line[len] != '-' &&
 	line[len] != SEPARATOR_CHAR)
@@ -52,10 +57,14 @@ void	lable_parse(t_parse *parser, char *line)
 
 int		register_len(t_parse *parser, char *line)
 {
-	int		reg;
+	int		len;
+	int		curlen;
 
-	reg = ft_atoi(&line[parser->column + 1]);
-	return (reg > 0) ? ((reg < 100) ? ((reg < 10) ? 2 : 3) : 0) : 0;
+	curlen = 0;
+	len = parser->column + 1;
+	while (line[len] && ft_isdigit(line[len++]))
+		curlen++;
+	return ((curlen > 0 && curlen < 3) ? curlen : 0);
 }
 
 void	register_parse(t_parse *parser, char *line)
@@ -63,7 +72,6 @@ void	register_parse(t_parse *parser, char *line)
 	int		len;
 
 	len = register_len(parser, line);
-	GET_PTOKENS(parser, type, FT_QUETAIL) = REGISTER;
 	ft_strncpy(GET_PTOKENS(parser, content, FT_QUETAIL),
 	line + parser->column, len);
 	parser->column += len;
@@ -76,7 +84,7 @@ void	other_parse(t_parse *parser, char *line)
 
 	flag = 0;
 	len = line[parser->column] == '-' ? parser->column + 1 : parser->column;
-	while (line[len] && (line[len] == '_' || ft_isalpha(line[len]) || ft_isdigit(line[len])))
+	while (line[len] && is_symbol(line[len]))
 	{
 		if (ft_isalpha(line[len]))
 			flag = 1;
