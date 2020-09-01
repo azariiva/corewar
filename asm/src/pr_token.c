@@ -55,6 +55,7 @@ void			pr_gettoken(t_parse *parser, char *line)
 	{
 		add_token(parser, DIRECT_LABEL);
 		lable_parse(parser, line);
+		GET_PTOKENS(parser, type, FT_QUETAIL) = INDIRECT_LABLE;
 	}
 	else if (line[parser->column] == 'r' && register_len(parser, line))
 	{

@@ -37,7 +37,7 @@ void	skip_new_line(t_list **tokens)
 
 int		get_arg_type(t_token *token)
 {
-	if (token->type == INDIRECT)
+	if (token->type == INDIRECT || token->type == INDIRECT_LABLE)
 		return (T_IND);
 	else if (token->type == REGISTER)
 		return (T_REG);
@@ -51,10 +51,13 @@ void	mention_collect(t_parse *parser, t_token *token, int inst_pos)
 	t_lable	*lable;
 	t_lable	lable_name;
 
-	if (token->type == DIRECT_LABEL)
+	if (token->type == DIRECT_LABEL || token->type == INDIRECT_LABLE)
 	{
 		ft_bzero(&lable_name, sizeof(t_lable));
-		ft_strcat(lable_name.name, token->content + 2);
+		if (token->type == DIRECT_LABEL)
+			ft_strcat(lable_name.name, token->content + 2);
+		else
+			ft_strcat(lable_name.name, token->content + 1);
 		if (!(lable = ft_htget(parser->lables, &lable_name)))
 			collection_error(ERR_INVALID_LABLE, token);
 		lable->mentions[lable->size++] = inst_pos;
@@ -89,7 +92,10 @@ void	instruction_collect(t_parse *parser, t_list **tokens)
 			parser->position += asop->t_dir_size;
 		}
 		else if (type & T_IND)
+		{
+			mention_collect(parser, FT_LSTCONT(t_token, *tokens), inst_pos);
 			parser->position += 2;
+		}
 		else if (type & T_REG)
 			parser->position += 1;
 		*tokens = (*tokens)->next;
@@ -107,7 +113,7 @@ void	collection(t_parse *parser)
 
 	info_collect(parser);
 	tokens = parser->tokens->head;
-	while (FT_LSTCONT(t_token, tokens)->type != END_FILE)
+	while (tokens && FT_LSTCONT(t_token, tokens)->type != END_FILE)
 	{
 		skip_new_line(&tokens);
 		if (FT_LSTCONT(t_token, tokens)->type == LABEL)
@@ -125,8 +131,6 @@ void	collection(t_parse *parser)
 		}
 		if (FT_LSTCONT(t_token, tokens)->type == INSTRUCTION)
 			instruction_collect(parser, &tokens);
-		else
-			collection_error(ERR_INVALID_INSTRUCT, FT_LSTCONT(t_token, tokens));
 		tokens = tokens->next;
 	}
 }

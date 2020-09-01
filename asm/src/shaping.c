@@ -72,6 +72,14 @@ void	dir_shape(t_parse *parser, t_token *token, t_asop *asop)
 	}
 	else if (token->type == DIRECT)
 		wwrite(parser, ft_atoi(&token->content[1]), asop->t_dir_size);
+	else if (token->type == INDIRECT_LABLE)
+	{
+		ft_bzero(&lable_name, sizeof(t_lable));
+		ft_strcat(lable_name.name, token->content + 1);
+		lable = ft_htget(parser->lables, &lable_name);
+		wwrite(parser, lable->lab_pos - lable->mentions[lable->m_position++],
+		2);
+	}
 }
 
 void	instruct_shape(t_parse *parser, t_token *token)
@@ -99,7 +107,12 @@ void	instruct_shape(t_parse *parser, t_token *token)
 		else if (type & T_DIR)
 			dir_shape(parser, token, asop);
 		else if (type & T_IND)
-			wwrite(parser, ft_atoi(token->content), 2);
+		{
+			if (token->type == INDIRECT_LABLE)
+				dir_shape(parser, token, asop);
+			else
+				wwrite(parser, ft_atoi(token->content), 2);
+		}
 	}
 }
 

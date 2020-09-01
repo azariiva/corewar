@@ -50,6 +50,7 @@ typedef enum	e_type
 	COMMAND_NAME,
 	COMMAND_COMMENT,
 	INDIRECT,
+	INDIRECT_LABLE,
 	REGISTER,
 	SEPARATOR,
 	DIRECT_LABEL,
@@ -67,6 +68,7 @@ static char	*g_typearr[] = {
 	"COMMAND_NAME",
 	"COMMAND_COMMENT",
 	"INDIRECT",
+	"INDIRECT_LABEL"
 	"REGISTER",
 	"SEPARATOR",
 	"DIRECT_LABEL",
@@ -80,12 +82,10 @@ static char	*g_typearr[] = {
 
 # define TSTR(T) (g_typearr[T])
 
-# define REV_4(n) ((n >> 24) & 0x000000FF) | ((n >> 8) & 0x0000FF00) | \
-((n << 8) & 0x00FF0000) | ((n << 24) & 0xFF000000)
-# define REV_2(n) (((n >> 8) & 0x00FF) | \
-((n << 8) & 0xFF00))
+# define REV_4(n) (((n) >> 24) & 0x000000FF) | (((n) >> 8) & 0x0000FF00) | \
+(((n) << 8) & 0x00FF0000) | (((n) << 24) & 0xFF000000)
 
-# define MOV(n) ( (n << 16) | ((n >> 8) << 24) )
+# define REV_2(n) ((((n) >> 8) & 0x00FF) | (((n) << 8) & 0xFF00))
 
 typedef struct	s_token
 {
