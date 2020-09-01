@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   error.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: fhilary <fhilary@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2020/09/01 15:31:36 by fhilary           #+#    #+#             */
+/*   Updated: 2020/09/01 15:31:37 by fhilary          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "asm.h"
 #include "libft_printf.h"
 #include "libft_string.h"
@@ -24,7 +36,7 @@ void	collection_error(char *type, t_token *token)
 		token->row, token->column,
 		token->content);
 	}
-	else if (type == ERR_INVALID_PARAMETP)
+	else if (type == ERR_INVALID_PARAM)
 	{
 		ft_printf_fd(STDERR_FILENO,
 		"Invalid parameter type direct for instruction %s\n",

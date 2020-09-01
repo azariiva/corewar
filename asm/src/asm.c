@@ -1,20 +1,17 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   asm.c                                              :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: fhilary <fhilary@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2020/09/01 15:36:15 by fhilary           #+#    #+#             */
+/*   Updated: 2020/09/01 15:38:12 by fhilary          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "asm.h"
 #include <unistd.h>
-
-void	show_tokens(t_parse *parser)
-{
-	t_list	*token;
-
-	token = parser->tokens->head;
-	while (token)
-	{
-		ft_printf("[TOKEN][%d:%d] %s %s\n", ((t_token *)token->content)->row,
-		((t_token *)token->content)->column,
-		TSTR(((t_token *)token->content)->type),
-		((t_token *)token->content)->content);
-		token = token->next;
-	}
-}
 
 static void		execute(char *file)
 {
@@ -24,11 +21,11 @@ static void		execute(char *file)
 	if (!(parser.fdin = open(file, O_RDONLY)))
 		error(ERR_OPEN_FILE);
 	parse(&parser);
-	// show_tokens(&parser);
 	get_op_htable(&parser);
 	get_label_htable(&parser);
 	collection(&parser);
-	if (!(parser.fdout = open(new_filename(file, ".cor"), O_CREAT | O_TRUNC | O_WRONLY, 0644)))
+	if (!(parser.fdout = open(new_filename(file, ".cor"),
+	O_CREAT | O_TRUNC | O_WRONLY, 0644)))
 		error(ERR_CREATE_FILE);
 	if (parser.position > CHAMP_MAX_SIZE)
 		error(ERR_INVALID_CODE_SIZE);

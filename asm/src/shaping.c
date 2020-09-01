@@ -6,7 +6,7 @@
 /*   By: fhilary <fhilary@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/28 14:17:55 by fhilary           #+#    #+#             */
-/*   Updated: 2020/08/28 20:33:33 by fhilary          ###   ########.fr       */
+/*   Updated: 2020/09/01 15:17:32 by fhilary          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,6 @@
 int		get_arg_type_code(t_parse *parser)
 {
 	t_list		*tokens;
-	int			type;
 	int			x;
 	int			i;
 
@@ -26,12 +25,11 @@ int		get_arg_type_code(t_parse *parser)
 	i = 3;
 	while (FT_LSTCONT(t_token, tokens)->type != END_LINE)
 	{
-		type = get_arg_type(FT_LSTCONT(t_token, tokens));
-		if (type & T_DIR)
+		if (get_arg_type(tokens) & T_DIR)
 			x |= (1 << (i-- * 2 + 1));
-		else if (type & T_REG)
+		else if (get_arg_type(tokens) & T_REG)
 			x |= (1 << (i-- * 2));
-		else if (type & T_IND)
+		else if (get_arg_type(tokens) & T_IND)
 		{
 			x |= (1 << (i * 2));
 			x |= (1 << (i-- * 2 + 1));
@@ -70,9 +68,16 @@ void	dir_shape(t_parse *parser, t_token *token, t_asop *asop)
 		wwrite(parser, lable->lab_pos - lable->mentions[lable->m_position++],
 		asop->t_dir_size);
 	}
-	else if (token->type == DIRECT)
+	else
 		wwrite(parser, ft_atoi(&token->content[1]), asop->t_dir_size);
-	else if (token->type == INDIRECT_LABLE)
+}
+
+void	ind_shape(t_parse *parser, t_token *token)
+{
+	t_lable	*lable;
+	t_lable	lable_name;
+
+	if (token->type == INDIRECT_LABLE)
 	{
 		ft_bzero(&lable_name, sizeof(t_lable));
 		ft_strcat(lable_name.name, token->content + 1);
@@ -80,45 +85,36 @@ void	dir_shape(t_parse *parser, t_token *token, t_asop *asop)
 		wwrite(parser, lable->lab_pos - lable->mentions[lable->m_position++],
 		2);
 	}
+	else
+		wwrite(parser, ft_atoi(token->content), 2);
 }
 
-void	instruct_shape(t_parse *parser, t_token *token)
+void	instruct_shape(t_parse *parser, t_list *token)
 {
 	t_asop	*asop;
 	t_asop	op_name;
-	int		type;
-	int		x;
 
 	ft_bzero(&op_name, sizeof(t_asop));
-	op_name.name = token->content;
+	op_name.name = FT_LSTCONT(t_token, token)->content;
 	asop = ft_htget(parser->op_htable, &op_name);
-	write(parser->fdout, &asop->bytecode, 1);
+	wwrite(parser, asop->bytecode, 1);
 	if (asop->arg_types_code)
-	{
-		x = get_arg_type_code(parser);
-		write(parser->fdout, &x, 1);
-	}
-	while ((token = FT_LSTCONT(t_token, ft_quepop(parser->tokens)))->type !=
+		wwrite(parser, get_arg_type_code(parser), 1);
+	while (FT_LSTCONT(t_token, (token = ft_quepop(parser->tokens)))->type !=
 	END_LINE)
 	{
-		type = get_arg_type(token);
-		if (type & T_REG)
-			wwrite(parser, ft_atoi(&token->content[1]), 1);
-		else if (type & T_DIR)
-			dir_shape(parser, token, asop);
-		else if (type & T_IND)
-		{
-			if (token->type == INDIRECT_LABLE)
-				dir_shape(parser, token, asop);
-			else
-				wwrite(parser, ft_atoi(token->content), 2);
-		}
+		if (get_arg_type(token) & T_REG)
+			wwrite(parser, ft_atoi(&FT_LSTCONT(t_token, token)->content[1]), 1);
+		else if (get_arg_type(token) & T_DIR)
+			dir_shape(parser, FT_LSTCONT(t_token, token), asop);
+		else if (get_arg_type(token) & T_IND)
+			ind_shape(parser, FT_LSTCONT(t_token, token));
 	}
 }
 
 void	shaping(t_parse *parser)
 {
-	t_token	*token;
+	t_list	*token;
 
 	wwrite(parser, COREWAR_EXEC_MAGIC, 4);
 	write(parser->fdout, parser->name, sizeof(parser->name));
@@ -126,10 +122,10 @@ void	shaping(t_parse *parser)
 	wwrite(parser, parser->position, 4);
 	write(parser->fdout, parser->comment, sizeof(parser->comment));
 	wwrite(parser, 0, 4);
-	while ((token = FT_LSTCONT(t_token, ft_quepop(parser->tokens)))->type !=
+	while (FT_LSTCONT(t_token, token = ft_quepop(parser->tokens))->type !=
 	END_FILE)
 	{
-		if (token->type == INSTRUCTION)
+		if (FT_LSTCONT(t_token, token)->type == INSTRUCTION)
 			instruct_shape(parser, token);
 	}
 }

@@ -6,7 +6,7 @@
 /*   By: fhilary <fhilary@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/08 19:53:09 by blinnea           #+#    #+#             */
-/*   Updated: 2020/08/28 18:13:20 by fhilary          ###   ########.fr       */
+/*   Updated: 2020/09/01 15:34:17 by fhilary          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@
 # define ERR_COMMENT_LEN		"Champion comment too long (Max length 2048)"
 # define ERR_NO_NAME_OR_COMMENT	"Champion has no name or comment"
 # define ERR_INVALID_INSTRUCT	"Invalid instruction"
-# define ERR_INVALID_PARAMETP	"Invalid parameter"
+# define ERR_INVALID_PARAM		"Invalid parameter"
 # define ERR_SYNTAX				"Syntax error"
 # define ERR_INVALID_LABLE		"Invalid lable"
 
@@ -126,11 +126,10 @@ typedef struct	s_parse
 int				isrighttype(char *name);
 char			*new_filename(char *file, char *type);
 
-void			add_token(t_parse *parser, t_type type);
+void			add_token(t_parse *parser, t_type type, char *line);
 
 void			parse(t_parse *parser);
 void			pr_skip_space(t_parse *parser, char *line);
-void			pr_skip_comment(t_parse *parser, char *line);
 void			pr_gettoken(t_parse *parser, char *line);
 void			string_parse(t_parse *parser, char *line);
 void			lable_parse(t_parse *parser, char *line);
@@ -139,8 +138,8 @@ void			register_parse(t_parse *parser, char *line);
 int				register_len(t_parse *parser, char *line);
 void			other_parse(t_parse *parser, char *line);
 
-void			instruction_collect(t_parse *parser, t_list **tokens);
 void			collection(t_parse *parser);
+void			coll_skip_tokens(t_parse *parser);
 
 void			collection_error(char *type, t_token *token);
 void			lex_error(int row, int column);
@@ -150,7 +149,8 @@ void			shaping(t_parse *parser);
 
 void			show_tokens(t_parse *parser);
 
-int				get_arg_type(t_token *token);
+int				get_arg_type(t_list *ltoken);
 void			get_label_htable(t_parse *parser);
 void			get_op_htable(t_parse *parser);
+
 #endif

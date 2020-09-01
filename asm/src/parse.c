@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parse.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: fhilary <fhilary@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2020/09/01 15:32:10 by fhilary           #+#    #+#             */
+/*   Updated: 2020/09/01 15:42:27 by fhilary          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "asm.h"
 
 void	string_parse(t_parse *parser, char *line)
@@ -15,7 +27,8 @@ void	string_parse(t_parse *parser, char *line)
 	parser->column += ft_strlen(line) + 1;
 	if (ft_strlen(line) > COMMENT_LENGTH)
 		error(ERR_LEN_STRING);
-	ft_strncpy(GET_PTOKENS(parser, content, FT_QUETAIL), line, ft_strlen(line) - 1);
+	ft_strncpy(GET_PTOKENS(parser, content, FT_QUETAIL), line,
+	ft_strlen(line) - 1);
 }
 
 void	number_parse(t_parse *parser, char *line)
@@ -71,7 +84,7 @@ void	register_parse(t_parse *parser, char *line)
 {
 	int		len;
 
-	len = register_len(parser, line);
+	len = register_len(parser, line) + 1;
 	ft_strncpy(GET_PTOKENS(parser, content, FT_QUETAIL),
 	line + parser->column, len);
 	parser->column += len;
@@ -85,11 +98,7 @@ void	other_parse(t_parse *parser, char *line)
 	flag = 0;
 	len = line[parser->column] == '-' ? parser->column + 1 : parser->column;
 	while (line[len] && is_symbol(line[len]))
-	{
-		if (ft_isalpha(line[len]))
-			flag = 1;
-		len++;
-	}
+		flag += ft_isalpha(line[len++]) ? 1 : 0;
 	if (line[len] == ':' && len > parser->column)
 	{
 		GET_PTOKENS(parser, type, FT_QUETAIL) = LABEL;
@@ -120,23 +129,21 @@ void	parse(t_parse *parser)
 		row = parser->row;
 		parser->column = 0;
 		pr_skip_space(parser, line);
-		pr_skip_comment(parser, line);
 		if (!line[parser->column] && !(parser->tokens &&
 		FT_QUETAIL(t_token, parser->tokens)->type == NEW_LINE))
-			add_token(parser, NEW_LINE);
+			add_token(parser, NEW_LINE, line);
 		while (row == parser->row && line[parser->column])
 		{
 			pr_skip_space(parser, line);
-			pr_skip_comment(parser, line);
 			if (line[parser->column])
 				pr_gettoken(parser, line);
 		}
 		if (GET_PTOKENS(parser, type, FT_QUETAIL) != NEW_LINE)
-			add_token(parser, END_LINE);
+			add_token(parser, END_LINE, line);
 		ft_strdel(&line);
 	}
 	if ((int)size == ERR)
 		error(ERR_READ_FILE);
 	if (size == END)
-		add_token(parser, END_FILE);
+		add_token(parser, END_FILE, line);
 }
