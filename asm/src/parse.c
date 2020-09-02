@@ -109,7 +109,7 @@ void	other_parse(t_parse *parser, char *line)
 		return ;
 	}
 	if (line[len] && !ft_isspace(line[len]) && line[len] != SEPARATOR_CHAR &&
-	line[len] != DIRECT_CHAR)
+	line[len] != COMMENT_CHAR)
 		lex_error(parser->row, parser->column + len);
 	if (flag)
 		GET_PTOKENS(parser, type, FT_QUETAIL) = INSTRUCTION;
