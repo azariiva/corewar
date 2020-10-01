@@ -6,7 +6,7 @@
 #    By: blinnea <blinnea@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/08/15 19:50:55 by blinnea           #+#    #+#              #
-#    Updated: 2020/08/15 20:33:48 by blinnea          ###   ########.fr        #
+#    Updated: 2020/08/25 15:03:55 by blinnea          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -26,7 +26,7 @@ GREENB = \033[42m
 # **************************************************************************** #
 
 CC = clang
-CF = -Wall -Wextra -Werror -m64 -O3 -ggdb
+CF = -Wall -Wextra -Werror -m64 -ggdb
 
 NAME = corewar
 
