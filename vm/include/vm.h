@@ -6,7 +6,7 @@
 /*   By: blinnea <blinnea@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/15 18:00:13 by blinnea           #+#    #+#             */
-/*   Updated: 2020/08/23 15:14:25 by blinnea          ###   ########.fr       */
+/*   Updated: 2020/10/01 19:56:02 by blinnea          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 # include "op.h"
 # include <limits.h>
 # include <unistd.h>
+# include <stdint.h>
 
 /*
 ** Change that on blissdeathour branch if needed.
@@ -29,17 +30,24 @@
 # define MAX_PLAYERS (4)
 
 typedef struct s_player	t_player;
+typedef struct s_vm		t_vm;
 
 struct					s_player
 {
+	int			id;
 	const char	*fname;
-	char		name[PROG_NAME_LENGTH + 1];
-	char		comment[COMMENT_LENGTH + 1];
+	header_t	header;
 	char		exec[CHAMP_MAX_SIZE + 1];
-	int			idx;
 };
 
-t_player				*read_champs(t_acav acav);
+t_player				*parse_args(t_acav acav);
 bool					init_champs(t_player *pls);
+
+// struct					s_vm
+// {
+// 	char		*l
+// 	char		mem[MEM_SIZE];
+
+// };
 
 #endif
