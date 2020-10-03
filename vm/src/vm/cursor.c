@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cursor.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: blinnea <blinnea@student.42.fr>            +#+  +:+       +#+        */
+/*   By: fhilary <fhilary@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/03 16:31:14 by blinnea           #+#    #+#             */
-/*   Updated: 2020/10/03 17:05:11 by blinnea          ###   ########.fr       */
+/*   Updated: 2020/10/03 17:14:43 by fhilary          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,5 +29,5 @@ void	init_cursor(t_cursor *c, uint32_t pid, uint32_t pc)
 	ft_bzero(c, sizeof(*c));
 	c->id = ++id;
 	c->pc = pc;
-	c->reg[0] = (uint32_t)(-pid);
+	c->regs[0] = (uint32_t)(-pid);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   vm.h                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: blinnea <blinnea@student.42.fr>            +#+  +:+       +#+        */
+/*   By: fhilary <fhilary@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/15 18:00:13 by blinnea           #+#    #+#             */
-/*   Updated: 2020/10/03 17:07:46 by blinnea          ###   ########.fr       */
+/*   Updated: 2020/10/03 17:12:29 by fhilary          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,5 +38,6 @@ struct					s_vm
 t_vm	*parse_args(t_acav acav);
 void	load_pls(t_vm *vm);
 bool	add_cursor(t_vm *vm, t_cursor *c);
+bool	place_cursors(t_vm *vm);
 
 #endif

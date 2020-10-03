@@ -3,6 +3,7 @@
 # define OP_H
 
 # include <stdbool.h>
+# include <stdint.h>
 
 # define IND_SIZE				2
 # define REG_SIZE				4
