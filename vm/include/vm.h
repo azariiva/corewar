@@ -6,7 +6,7 @@
 /*   By: blinnea <blinnea@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/15 18:00:13 by blinnea           #+#    #+#             */
-/*   Updated: 2020/10/03 16:42:02 by blinnea          ###   ########.fr       */
+/*   Updated: 2020/10/03 16:43:22 by blinnea          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,5 +35,6 @@ struct					s_vm
 };
 
 t_vm	*parse_args(t_acav acav);
+void	load_pls(t_vm *vm);
 
 #endif
