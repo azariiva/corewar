@@ -6,7 +6,7 @@
 /*   By: blinnea <blinnea@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/15 20:30:13 by blinnea           #+#    #+#             */
-/*   Updated: 2020/10/03 15:19:54 by blinnea          ###   ########.fr       */
+/*   Updated: 2020/10/03 15:47:51 by blinnea          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,8 @@ int	main(int ac, char **av)
 	t_vm	*vm;
 
 	vm = parse_args((t_acav){.ac = ac, .av = av});
-	init_pls(vm->pls, vm->pls_size);
+	if (init_pls(vm->pls, vm->pls_size) == false)
+		return (-1);
 	for (int i = 0; i < vm->pls_size; i++)
 	{
 		show_pl(vm->pls + i);

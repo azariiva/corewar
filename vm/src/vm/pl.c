@@ -38,21 +38,21 @@ static bool			init_pl(t_player *p)
 	uint32_t	null;
 
 	if ((fd = open(p->fname, O_RDONLY)) < 0)
-		return (ft_printf("Error: open\n") && false);
+		return (ft_printf_fd(STDERR_FILENO, "Error: open\n") && false);
 	if (rread(fd, &p->header.magic, sizeof(p->header.magic)) != sizeof(p->header.magic) || p->header.magic != COREWAR_EXEC_MAGIC)
-		return (ft_printf("Error: Magic Header\n") && (close(fd) & false));
+		return (ft_printf_fd(STDERR_FILENO, "Error: Magic Header\n") && (close(fd) & false));
 	if (read(fd, p->header.prog_name, PROG_NAME_LENGTH * sizeof(*(p->header.prog_name))) != PROG_NAME_LENGTH * sizeof(*(p->header.prog_name)))
-		return (ft_printf("Error: Name\n") && (close(fd) & false));
+		return (ft_printf_fd(STDERR_FILENO, "Error: Name\n") && (close(fd) & false));
 	if (read(fd, &null, sizeof(null)) != sizeof(null) || null)
-		return (ft_printf("Error: NULL\n") && (close(fd) & false));
+		return (ft_printf_fd(STDERR_FILENO, "Error: NULL\n") && (close(fd) & false));
 	if (rread(fd, &p->header.prog_size, sizeof(p->header.prog_size)) != sizeof(p->header.prog_size) || p->header.prog_size > CHAMP_MAX_SIZE)
-		return (ft_printf("Error: Champ Size\n") && (close(fd) & false) );
+		return (ft_printf_fd(STDERR_FILENO, "Error: Champ Size\n") && (close(fd) & false) );
 	if (read(fd, p->header.comment, COMMENT_LENGTH * sizeof(*(p->header.comment))) != COMMENT_LENGTH * sizeof(*(p->header.comment)))
-		return (ft_printf("Error: Comment\n") && (close(fd) & false));
+		return (ft_printf_fd(STDERR_FILENO, "Error: Comment\n") && (close(fd) & false));
 	if (read(fd, &null, sizeof(null)) != sizeof(null) || null)
-		return (ft_printf("Error: NULL\n") && (close(fd) & false));
+		return (ft_printf_fd(STDERR_FILENO, "Error: NULL\n") && (close(fd) & false));
 	if (read(fd, p->exec, p->header.prog_size * sizeof(*(p->exec))) != p->header.prog_size)
-		return (ft_printf("Error: Executable Code\n") && (close(fd) & false));
+		return (ft_printf_fd(STDERR_FILENO, "Error: Executable Code\n") && (close(fd) & false));
 	return (close(fd) | true);
 }
 
