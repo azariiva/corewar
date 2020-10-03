@@ -3,10 +3,10 @@
         {
             "name": "Linux",
             "includePath": [
+				"${workspaceFolder}/libft/include",
 				"${workspaceFolder}/asm/include",
 				"${workspaceFolder}/visualizer/include",
-				"${workspaceFolder}/vm/include",
-                "${workspaceFolder}/libft/include"
+				"${workspaceFolder}/vm/include"
             ],
             "defines": [],
             "compilerPath": "/usr/bin/clang",

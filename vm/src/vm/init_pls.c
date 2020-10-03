@@ -1,18 +1,17 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   init_champs.c                                      :+:      :+:    :+:   */
+/*   init_pls.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: blinnea <blinnea@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/20 15:23:48 by blinnea           #+#    #+#             */
-/*   Updated: 2020/10/01 20:30:30 by blinnea          ###   ########.fr       */
+/*   Updated: 2020/10/03 14:38:26 by blinnea          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "vm.h"
+#include "pl.h"
 #include <fcntl.h>
-#include <unistd.h>
 
 static ssize_t		rread(const int fd, void *buff, size_t sz)
 {
@@ -33,7 +32,7 @@ static ssize_t		rread(const int fd, void *buff, size_t sz)
 	return (rc);
 }
 
-static bool			init_champ(t_player *p)
+static bool			init_pl(t_player *p)
 {
 	int			fd;
 	uint32_t	null;
@@ -57,13 +56,13 @@ static bool			init_champ(t_player *p)
 	return (close(fd) | true);
 }
 
-bool				init_champs(t_player *pls)
+bool				init_pls(t_player *pls)
 {
 	uint32_t	i;
 
 	i = -1;
 	while (++i < MAX_PLAYERS && pls[i].id)
-		if (!init_champ(pls + i))
+		if (!init_pl(pls + i))
 			return (false);
 	return (true);
 }

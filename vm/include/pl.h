@@ -1,39 +1,39 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   vm.h                                               :+:      :+:    :+:   */
+/*   pl.h                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: blinnea <blinnea@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/08/15 18:00:13 by blinnea           #+#    #+#             */
-/*   Updated: 2020/10/03 14:57:27 by blinnea          ###   ########.fr       */
+/*   Created: 2020/10/03 14:39:52 by blinnea           #+#    #+#             */
+/*   Updated: 2020/10/03 14:43:45 by blinnea          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef VM_H
+#ifndef	PL_H
 
-# define VM_H
+# define PL_H
 
-# include "pl.h"
+# include "libft.h"
+# include "op.h"
+# include <unistd.h>
+# include <stdint.h>
+# include <stdbool.h>
 
-typedef struct s_vm		t_vm;
+typedef struct s_player	t_player;
 
-struct					s_vm
+struct					s_player
 {
-	uint8_t		mem[MEM_SIZE];
-	t_player	pls[MAX_PLAYERS];
-	uint8_t		pls_size;
-	t_player	*last_alive; // Why?
-	t_list		*cursors;
-	size_t		live_execs;
-	size_t		curr_cycle;
-	ssize_t		cycles_to_die;
-	size_t		after_check_cycle;
-	uint8_t		checks_num;
-	size_t		dump_cycle;
-	uint8_t		dump_mode;
+	int			id;
+	const char	*fname;
+	header_t	header;
+	char		exec[CHAMP_MAX_SIZE + 1];
+	size_t		last_report;
+	bool		alive;
 };
 
-t_vm	*parse_args2(t_acav acav);
+t_player				*parse_args(t_acav acav);
+bool					init_pls(t_player *pls);
+void					show_pl(t_player *pl);
 
 #endif

@@ -1,30 +1,22 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   vm.c                                               :+:      :+:    :+:   */
+/*   show_pl.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: blinnea <blinnea@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/08/15 20:30:13 by blinnea           #+#    #+#             */
-/*   Updated: 2020/10/03 14:50:34 by blinnea          ###   ########.fr       */
+/*   Created: 2020/10/03 14:39:29 by blinnea           #+#    #+#             */
+/*   Updated: 2020/10/03 14:54:32 by blinnea          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "vm.h"
+#include "pl.h"
 
-int	main(int ac, char **av)
+void					show_pl(t_player *pl)
 {
-	t_player	*players;
-
-	players = parse_args((t_acav){.ac = ac, .av = av});
-	init_pls(players);
-	for (int i = 0; i < MAX_PLAYERS; i++)
-	{
-		if (players[i].id)
-		{
-			show_pl(players + i);
-			ft_printf("\n");
-		}
-	}
-	return (0);
+	ft_printf("id: %d\n", pl->id);
+	ft_printf("filename: %s\n", pl->fname);
+	ft_printf("program name: %s\n", pl->header.prog_name);
+	ft_printf("program size: %u\n", pl->header.prog_size);
+	ft_printf("comment: %s\n", pl->header.comment);
 }

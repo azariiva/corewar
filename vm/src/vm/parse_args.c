@@ -6,13 +6,11 @@
 /*   By: blinnea <blinnea@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/15 18:12:50 by blinnea           #+#    #+#             */
-/*   Updated: 2020/10/01 19:59:53 by blinnea          ###   ########.fr       */
+/*   Updated: 2020/10/03 14:59:27 by blinnea          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "vm.h"
-#include "libft.h"
-#include <stdbool.h>
+#include "pl.h"
 
 inline static void	add_champ(const char*const fname, const uint32_t id,
 t_player*const players, bool*const occids)
@@ -70,7 +68,7 @@ t_player			*parse_args(t_acav acav)
 	int				c;
 	uint32_t		pidx;
 
-	ft_bzero(occids, MAX_PLAYERS * sizeof(*occids));
+	ft_bzero(occids, sizeof(occids));
 	pidx = 0;
 	while (pidx <= MAX_PLAYERS)
 	{

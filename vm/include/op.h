@@ -2,7 +2,6 @@
 
 # define OP_H
 
-# include "libft.h"
 # include <stdbool.h>
 
 # define IND_SIZE				2
@@ -73,5 +72,13 @@ typedef struct		s_asop
 	bool		arg_types_code;
 	int			t_dir_size;
 }					t_asop;
+
+// typedef struct		s_op
+// {
+// 	t_asop			*asop;
+// 	bool			modify_carry;
+// 	uint8_t			cycles_exec;
+// 	void			(*f)(t_vm *, t_cursor *);
+// }					t_op;
 
 #endif

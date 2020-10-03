@@ -6,7 +6,7 @@
 #    By: blinnea <blinnea@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/08/15 19:50:55 by blinnea           #+#    #+#              #
-#    Updated: 2020/08/25 15:03:55 by blinnea          ###   ########.fr        #
+#    Updated: 2020/10/03 14:45:00 by blinnea          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -41,6 +41,7 @@ LFT =		../libft/libft.a
 LFT_H =		../libft/include/libft.h
 OP_H =		include/op.h
 VM_H =		include/vm.h
+PL_H =		include/pl.h
 
 # **************************************************************************** #
 #                                 FILENAMES                                    #
@@ -63,11 +64,11 @@ dir:
 $(NAME): obj/vm.o $(LFT) $(VM_O)
 	@$(CC) $< $(VM_O) -L../libft -lft -o $@
 
-obj/vm.o: src/vm.c $(VM_H) $(OP_H) $(LFT_H) | dir
+obj/vm.o: src/vm.c $(VM_H) $(OP_H) $(PL_H) $(LFT_H) | dir
 	@$(CC) $(CF) -c $< -o $@ -I ../libft/include -I include
 	@echo "$(GREENB) $(DEFAULT)\c"
 
-obj/%.o: src/vm/%.c $(VM_H) $(OP_H) $(LFT_H) | dir
+obj/%.o: src/vm/%.c $(VM_H) $(OP_H) $(PL_H) $(LFT_H) | dir
 	@$(CC) $(CF) -c $< -o $@ -I ../libft/include -I include
 	@echo "$(GREENB) $(DEFAULT)\c"
 
