@@ -1,29 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   vm.c                                               :+:      :+:    :+:   */
+/*   load_pls.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fhilary <fhilary@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/08/15 20:30:13 by blinnea           #+#    #+#             */
-/*   Updated: 2020/10/03 16:41:35 by fhilary          ###   ########.fr       */
+/*   Created: 2020/10/03 15:20:25 by fhilary           #+#    #+#             */
+/*   Updated: 2020/10/03 16:40:05 by fhilary          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "vm.h"
 
-int	main(int ac, char **av)
+static void	load_pl(t_vm *vm, int p)
 {
-	t_vm	*vm;
+	int		position;
 
-	vm = parse_args((t_acav){.ac = ac, .av = av});
-	if (init_pls(vm->pls, vm->pls_size) == false)
-		return (-1);
-	load_pls(vm);
-	for (int i = 0; i < vm->pls_size; i++)
-	{
-		show_pl(vm->pls + i);
-		ft_printf("\n");
-	}
-	return (0);
+	position = MEM_SIZE / vm->pls_size * p;
+	ft_memcpy(vm->mem + position, ((t_player*)(vm->pls + p))->exec,
+	((t_player*)(vm->pls + p))->header.prog_size);
+}
+
+void		load_pls(t_vm *vm)
+{
+	uint32_t	i;
+
+	i = -1;
+	while (++i < vm->pls_size)
+		load_pl(vm, i);
 }
