@@ -6,7 +6,7 @@
 /*   By: blinnea <blinnea@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/15 18:00:13 by blinnea           #+#    #+#             */
-/*   Updated: 2020/10/03 14:57:27 by blinnea          ###   ########.fr       */
+/*   Updated: 2020/10/03 15:19:41 by blinnea          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,6 @@ struct					s_vm
 	uint8_t		dump_mode;
 };
 
-t_vm	*parse_args2(t_acav acav);
+t_vm	*parse_args(t_acav acav);
 
 #endif

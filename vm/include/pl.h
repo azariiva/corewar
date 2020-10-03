@@ -6,7 +6,7 @@
 /*   By: blinnea <blinnea@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/03 14:39:52 by blinnea           #+#    #+#             */
-/*   Updated: 2020/10/03 14:43:45 by blinnea          ###   ########.fr       */
+/*   Updated: 2020/10/03 15:20:16 by blinnea          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,8 +32,7 @@ struct					s_player
 	bool		alive;
 };
 
-t_player				*parse_args(t_acav acav);
-bool					init_pls(t_player *pls);
+bool					init_pls(t_player *pls, uint8_t pls_size);
 void					show_pl(t_player *pl);
 
 #endif

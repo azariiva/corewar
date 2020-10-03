@@ -56,13 +56,22 @@ static bool			init_pl(t_player *p)
 	return (close(fd) | true);
 }
 
-bool				init_pls(t_player *pls)
+bool				init_pls(t_player *pls, uint8_t pls_size)
 {
 	uint32_t	i;
 
 	i = -1;
-	while (++i < MAX_PLAYERS && pls[i].id)
+	while (++i < pls_size)
 		if (!init_pl(pls + i))
 			return (false);
 	return (true);
+}
+
+void				show_pl(t_player *pl)
+{
+	ft_printf("id: %d\n", pl->id);
+	ft_printf("filename: %s\n", pl->fname);
+	ft_printf("program name: %s\n", pl->header.prog_name);
+	ft_printf("program size: %u\n", pl->header.prog_size);
+	ft_printf("comment: %s\n", pl->header.comment);
 }

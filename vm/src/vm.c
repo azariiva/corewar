@@ -6,7 +6,7 @@
 /*   By: blinnea <blinnea@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/15 20:30:13 by blinnea           #+#    #+#             */
-/*   Updated: 2020/10/03 14:50:34 by blinnea          ###   ########.fr       */
+/*   Updated: 2020/10/03 15:19:54 by blinnea          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,17 +14,14 @@
 
 int	main(int ac, char **av)
 {
-	t_player	*players;
+	t_vm	*vm;
 
-	players = parse_args((t_acav){.ac = ac, .av = av});
-	init_pls(players);
-	for (int i = 0; i < MAX_PLAYERS; i++)
+	vm = parse_args((t_acav){.ac = ac, .av = av});
+	init_pls(vm->pls, vm->pls_size);
+	for (int i = 0; i < vm->pls_size; i++)
 	{
-		if (players[i].id)
-		{
-			show_pl(players + i);
-			ft_printf("\n");
-		}
+		show_pl(vm->pls + i);
+		ft_printf("\n");
 	}
 	return (0);
 }
