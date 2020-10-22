@@ -6,7 +6,7 @@
 #    By: blinnea <blinnea@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/02/20 14:53:53 by torange           #+#    #+#              #
-#    Updated: 2020/10/22 16:25:27 by blinnea          ###   ########.fr        #
+#    Updated: 2020/10/22 16:39:54 by blinnea          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -72,7 +72,7 @@ obj:
 
 clean:
 	@make -C ../$(LFT) fclean
-	@rm -rf $(OBJECTS_DIR)
+	@rm -rf obj
 	@echo "$(NAME): $(RED)object files were deleted$(RESET)"
 
 fclean: clean
