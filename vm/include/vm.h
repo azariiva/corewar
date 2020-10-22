@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   vm.h                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fhilary <fhilary@student.42.fr>            +#+  +:+       +#+        */
+/*   By: blinnea <blinnea@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/15 18:00:13 by blinnea           #+#    #+#             */
-/*   Updated: 2020/10/03 17:12:29 by fhilary          ###   ########.fr       */
+/*   Updated: 2020/10/06 17:20:19 by blinnea          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,14 +14,25 @@
 
 # define VM_H
 
-# include "pl.h"
 # include "cursor.h"
+# include "pl.h"
+# include "libft.h"
+# include <unistd.h>
+# include <stdint.h>
+# include <stdbool.h>
 
+typedef struct s_cell	t_cell;
 typedef struct s_vm		t_vm;
+
+struct					s_cell
+{
+	uint8_t		data;
+	uint8_t		owner;
+};
 
 struct					s_vm
 {
-	uint8_t		mem[MEM_SIZE];
+	t_cell		mem[MEM_SIZE];
 	t_player	pls[MAX_PLAYERS];
 	uint8_t		pls_size;
 	t_player	*last_alive; // Why?
@@ -31,13 +42,12 @@ struct					s_vm
 	ssize_t		cycles_to_die;
 	size_t		after_check_cycle;
 	uint8_t		checks_num;
-	size_t		dump_cycle;
-	uint8_t		dump_mode;
 };
 
-t_vm	*parse_args(t_acav acav);
-void	load_pls(t_vm *vm);
+
+t_vm	*init_vm(t_acav acav);
 bool	add_cursor(t_vm *vm, t_cursor *c);
-bool	place_cursors(t_vm *vm);
+void	clear_cursors(t_vm *vm); // Think about replacing this function with macro
+
 
 #endif

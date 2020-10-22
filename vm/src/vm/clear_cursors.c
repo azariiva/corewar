@@ -1,18 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   place_cursors.c                                    :+:      :+:    :+:   */
+/*   clear_cursors.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fhilary <fhilary@student.42.fr>            +#+  +:+       +#+        */
+/*   By: blinnea <blinnea@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/10/03 17:12:56 by fhilary           #+#    #+#             */
-/*   Updated: 2020/10/03 17:15:31 by fhilary          ###   ########.fr       */
+/*   Created: 2020/10/06 16:58:51 by blinnea           #+#    #+#             */
+/*   Updated: 2020/10/06 17:00:23 by blinnea          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "vm.h"
 
-bool	place_cursors(t_vm *vm)
+static void	del(void *c, size_t cs)
 {
-	
+	if (cs && c)
+		ft_memdel(&c);
+}
+
+void		clear_cursors(t_vm *vm)
+{
+	ft_lstdel(&(vm->cursors), del);
 }
