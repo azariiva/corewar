@@ -13,6 +13,13 @@
 #include "asm.h"
 #include <unistd.h>
 
+static void		clean(t_parse *parser)
+{
+	del_op_htable(parser);
+	del_lable_htable(parser);
+	queue_del(parser);
+}
+
 static void		execute(char *file)
 {
 	t_parse	parser;

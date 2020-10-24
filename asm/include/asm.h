@@ -151,6 +151,9 @@ void			show_tokens(t_parse *parser);
 
 int				get_arg_type(t_list *ltoken);
 void			get_label_htable(t_parse *parser);
+void			del_lable_htable(t_parse *parser);
 void			get_op_htable(t_parse *parser);
+void			del_op_htable(t_parse *parser);
 
+void			queue_del(t_parse *parser);
 #endif

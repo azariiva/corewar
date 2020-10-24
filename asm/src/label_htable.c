@@ -30,6 +30,22 @@ static unsigned long	hash(const void *tab, const size_t modulo)
 	return (ft_strhash(t->name, modulo));
 }
 
+static void				del(void *content, size_t cs)
+{
+	t_lable	*t;
+
+	if (cs && content)
+	{
+		t = content;
+		ft_memdel(&content);
+	}
+}
+
+void					del_lable_htable(t_parse *parser)
+{
+	ft_htdel(&parser->lables, del);
+}
+
 void					get_label_htable(t_parse *parser)
 {
 	t_list		*tokens;

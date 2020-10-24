@@ -30,6 +30,23 @@ static unsigned long	hash(const void *tab, const size_t modulo)
 	return (ft_strhash(t->name, modulo));
 }
 
+static void				del(void *content, size_t cs)
+{
+	t_asop	*t;
+
+	if (cs && content)
+	{
+		t = content;
+		ft_strdel(&(t->name));
+		ft_memdel(&content);
+	}
+}
+
+void					del_op_htable(t_parse *parser)
+{
+	ft_htdel(&parser->op_htable, del);
+}
+
 void					get_op_htable(t_parse *parser)
 {
 	size_t		i;
