@@ -24,6 +24,7 @@ void	string_parse(t_parse *parser, char *line)
 		line = ft_strjoin(line, newline);
 		ft_strdel(&newline);
 	}
+	ft_strdel(&newline);
 	parser->column += ft_strlen(line) + 1;
 	if (ft_strlen(line) > COMMENT_LENGTH)
 		error(ERR_LEN_STRING);
@@ -142,6 +143,7 @@ void	parse(t_parse *parser)
 			add_token(parser, END_LINE, line);
 		ft_strdel(&line);
 	}
+	ft_strdel(&line);
 	if ((int)size == ERR)
 		error(ERR_READ_FILE);
 	if (size == END)
