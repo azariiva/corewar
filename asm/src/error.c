@@ -29,27 +29,27 @@ void	error(char *err)
 
 void	collection_error(char *type, t_token *token)
 {
-	if (type == ERR_INVALID_INSTRUCT)
+	if (!ft_strcmp(type, ERR_INVALID_INSTRUCT))
 	{
 		ft_printf_fd(STDERR_FILENO,
 		"Invalid instruction at token [TOKEN][%d:%d] %s\n",
 		token->row, token->column,
 		token->content);
 	}
-	else if (type == ERR_INVALID_PARAM)
+	else if (!ft_strcmp(type, ERR_INVALID_PARAM))
 	{
 		ft_printf_fd(STDERR_FILENO,
 		"Invalid parameter type direct for instruction %s\n",
 		token->content);
 	}
-	else if (type == ERR_SYNTAX)
+	else if (!ft_strcmp(type, ERR_SYNTAX))
 	{
 		ft_printf_fd(STDERR_FILENO,
 		"Syntax error at token [TOKEN][%d:%d] %s\n",
 		token->row, token->column,
 		token->content);
 	}
-	else if (type == ERR_INVALID_LABLE)
+	else if (!ft_strcmp(type, ERR_INVALID_LABLE))
 	{
 		ft_printf_fd(STDERR_FILENO,
 		"No such label [TOKEN][%d:%d] %s\n",

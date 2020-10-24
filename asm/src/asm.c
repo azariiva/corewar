@@ -40,6 +40,7 @@ static void		execute(char *file)
 	ft_printf("Writing output program to %s\n", new_filename(file, ".cor"));
 	close(parser.fdin);
 	close(parser.fdout);
+	clean(&parser);
 }
 
 int				main(int ac, char **av)
