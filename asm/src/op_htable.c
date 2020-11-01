@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   op_htable.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fhilary <fhilary@student.42.fr>            +#+  +:+       +#+        */
+/*   By: blinnea <blinnea@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/01 15:36:37 by fhilary           #+#    #+#             */
-/*   Updated: 2020/09/01 15:36:38 by fhilary          ###   ########.fr       */
+/*   Updated: 2020/11/01 14:41:43 by blinnea          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,8 @@ static void				del(void *content, size_t cs)
 
 void					del_op_htable(t_parse *parser)
 {
-	ft_htdel(&parser->op_htable, del);
+	if (parser->op_htable)
+		ft_htdel(&(parser->op_htable), del);
 }
 
 void					get_op_htable(t_parse *parser)

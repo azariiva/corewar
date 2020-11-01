@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   label_htable.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fhilary <fhilary@student.42.fr>            +#+  +:+       +#+        */
+/*   By: blinnea <blinnea@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/01 15:36:03 by fhilary           #+#    #+#             */
-/*   Updated: 2020/09/01 15:37:06 by fhilary          ###   ########.fr       */
+/*   Updated: 2020/11/01 14:42:07 by blinnea          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,8 @@ static void				del(void *content, size_t cs)
 
 void					del_lable_htable(t_parse *parser)
 {
-	ft_htdel(&parser->lables, del);
+	if (parser->lables)
+		ft_htdel(&(parser->lables), del);
 }
 
 void					get_label_htable(t_parse *parser)
