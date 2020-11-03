@@ -6,7 +6,7 @@
 /*   By: fhilary <fhilary@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/08 19:53:09 by blinnea           #+#    #+#             */
-/*   Updated: 2020/09/01 15:34:17 by fhilary          ###   ########.fr       */
+/*   Updated: 2020/11/03 17:56:33 by fhilary          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -152,5 +152,9 @@ void			show_tokens(t_parse *parser);
 int				get_arg_type(t_list *ltoken);
 void			get_label_htable(t_parse *parser);
 void			get_op_htable(t_parse *parser);
+
+void			clear_label_htable(t_htable **lht);
+void			clear_op_htable(t_htable **oht);
+void			clear_parser(t_parse *parse);
 
 #endif

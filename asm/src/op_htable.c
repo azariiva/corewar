@@ -6,7 +6,7 @@
 /*   By: fhilary <fhilary@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/01 15:36:37 by fhilary           #+#    #+#             */
-/*   Updated: 2020/09/01 15:36:38 by fhilary          ###   ########.fr       */
+/*   Updated: 2020/11/03 17:38:13 by fhilary          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,17 @@ static unsigned long	hash(const void *tab, const size_t modulo)
 
 	t = (t_asop *)tab;
 	return (ft_strhash(t->name, modulo));
+}
+
+static void				del(void *c, size_t cs)
+{
+	if (c && cs)
+		ft_memdel(&c);
+}
+
+void					clear_op_htable(t_htable **oht)
+{
+	ft_htdel(oht, del);
 }
 
 void					get_op_htable(t_parse *parser)

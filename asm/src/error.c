@@ -6,7 +6,7 @@
 /*   By: fhilary <fhilary@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/01 15:31:36 by fhilary           #+#    #+#             */
-/*   Updated: 2020/09/01 15:31:37 by fhilary          ###   ########.fr       */
+/*   Updated: 2020/11/03 18:06:04 by fhilary          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,9 +15,11 @@
 #include "libft_string.h"
 #include <unistd.h>
 
+// TODO: rewrite errors to clear parser before exit
+
 void	lex_error(int row, int column)
 {
-	ft_printf_fd(STDERR_FILENO, "%Lexical error at [%d %d]\n", row, column);
+	ft_printf_fd(STDERR_FILENO, "Lexical error at [%d %d]\n", row, column);
 	exit(1);
 }
 

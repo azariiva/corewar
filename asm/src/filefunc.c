@@ -6,11 +6,12 @@
 /*   By: fhilary <fhilary@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/01 15:36:31 by fhilary           #+#    #+#             */
-/*   Updated: 2020/09/01 15:36:32 by fhilary          ###   ########.fr       */
+/*   Updated: 2020/11/03 17:40:55 by fhilary          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "asm.h"
+#include <limits.h>
 
 int		isrighttype(char *name)
 {
@@ -19,10 +20,9 @@ int		isrighttype(char *name)
 
 char	*new_filename(char *file, char *type)
 {
-	char	*filenew;
+	static char		filenew[PATH_MAX + 1];
 
-	filenew = (char *)malloc(sizeof(char) * ((ft_strlen(file) - 2) +
-	ft_strlen(type)));
+	ft_bzero(filenew, sizeof(filenew));
 	ft_strncpy(filenew, file, ft_strlen(file) - 2);
 	ft_strcat(filenew, type);
 	return (filenew);
