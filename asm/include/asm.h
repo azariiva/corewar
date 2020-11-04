@@ -6,7 +6,7 @@
 /*   By: fhilary <fhilary@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/08 19:53:09 by blinnea           #+#    #+#             */
-/*   Updated: 2020/11/03 17:56:33 by fhilary          ###   ########.fr       */
+/*   Updated: 2020/11/04 20:07:34 by fhilary          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,10 +38,10 @@
 # define ERR_NAME_LEN			"Champion name too long (Max length 128)"
 # define ERR_COMMENT_LEN		"Champion comment too long (Max length 2048)"
 # define ERR_NO_NAME_OR_COMMENT	"Champion has no name or comment"
-# define ERR_INVALID_INSTRUCT	"Invalid instruction"
-# define ERR_INVALID_PARAM		"Invalid parameter"
+# define ERR_INV_INST			"Invalid instruction"
+# define ERR_INV_PRM			"Invalid parameter"
 # define ERR_SYNTAX				"Syntax error"
-# define ERR_INVALID_LABLE		"Invalid lable"
+# define ERR_INV_LABLE			"Invalid lable"
 
 typedef enum	e_type
 {
@@ -141,9 +141,9 @@ void			other_parse(t_parse *parser, char *line);
 void			collection(t_parse *parser);
 void			coll_skip_tokens(t_parse *parser);
 
-void			collection_error(char *type, t_token *token);
-void			lex_error(int row, int column);
-void			error(char *err);
+void			collection_error(char *type, t_token *token, t_parse *parser);
+void			lex_error(t_parse *parser, int column);
+void			error(char *err, t_parse *parser);
 
 void			shaping(t_parse *parser);
 

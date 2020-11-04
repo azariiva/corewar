@@ -6,7 +6,7 @@
 /*   By: fhilary <fhilary@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/01 15:36:15 by fhilary           #+#    #+#             */
-/*   Updated: 2020/11/03 17:56:24 by fhilary          ###   ########.fr       */
+/*   Updated: 2020/11/04 20:28:56 by fhilary          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,14 +19,14 @@ static void		quedel(void *c, size_t cs)
 		ft_memdel(&c);
 }
 
-void			clear_parser(t_parse *parse)
+void			clear_parser(t_parse *parser)
 {
-	if (parse->lables)
-		clear_label_htable(&(parse->lables));
-	if (parse->op_htable)
-		clear_op_htable(&(parse->op_htable));
-	if (parse->tokens)
-		ft_quedel(&(parse->tokens));
+	if (parser->lables)
+		clear_label_htable(&(parser->lables));
+	if (parser->op_htable)
+		clear_op_htable(&(parser->op_htable));
+	if (parser->tokens)
+		ft_quedel(&(parser->tokens));
 }
 
 static void		execute(char *file)
@@ -36,16 +36,16 @@ static void		execute(char *file)
 	ft_bzero(&parser, sizeof(t_parse));
 	parser.tokens = ft_quenew(quedel);
 	if ((parser.fdin = open(file, O_RDONLY)) < 0)
-		error(ERR_OPEN_FILE);
+		error(ERR_OPEN_FILE, &parser);
 	parse(&parser);
 	get_op_htable(&parser);
 	get_label_htable(&parser);
 	collection(&parser);
 	if ((parser.fdout = open(new_filename(file, ".cor"),
 	O_CREAT | O_TRUNC | O_WRONLY, 0644)) < 0)
-		error(ERR_CREATE_FILE);
+		error(ERR_CREATE_FILE, &parser);
 	if (parser.position > CHAMP_MAX_SIZE)
-		error(ERR_INVALID_CODE_SIZE);
+		error(ERR_INVALID_CODE_SIZE, &parser);
 	shaping(&parser);
 	ft_printf("Writing output program to %s\n", new_filename(file, ".cor"));
 	clear_parser(&parser);

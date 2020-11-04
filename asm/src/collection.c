@@ -6,7 +6,7 @@
 /*   By: fhilary <fhilary@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/01 14:49:13 by fhilary           #+#    #+#             */
-/*   Updated: 2020/09/01 15:26:30 by fhilary          ###   ########.fr       */
+/*   Updated: 2020/11/04 20:07:51 by fhilary          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ static void	info_collect(t_parse *parser)
 		ft_quepop(parser->tokens);
 		if (ft_strlen(GET_PTOKENS(parser, content, FT_QUEHEAD)) >
 		PROG_NAME_LENGTH)
-			error(ERR_NAME_LEN);
+			error(ERR_NAME_LEN, parser);
 		ft_strcpy(parser->name,
 		FT_LSTCONT(t_token, ft_quepop(parser->tokens))->content);
 		info_collect(parser);
@@ -33,7 +33,7 @@ static void	info_collect(t_parse *parser)
 		info_collect(parser);
 	}
 	else if (!*parser->name || !*parser->comment)
-		error(ERR_NO_NAME_OR_COMMENT);
+		error(ERR_NO_NAME_OR_COMMENT, parser);
 }
 
 static void	mention_collect(t_parse *parser, t_list *token, int pos, int size)
@@ -51,7 +51,7 @@ static void	mention_collect(t_parse *parser, t_list *token, int pos, int size)
 	else
 		ft_strcat(lable_name.name, token->content + 1);
 	if (!(lable = ft_htget(parser->lables, &lable_name)))
-		collection_error(ERR_INVALID_LABLE, FT_LSTCONT(t_token, token));
+		collection_error(ERR_INV_LABLE, FT_LSTCONT(t_token, token), parser);
 	lable->mentions[lable->size++] = pos;
 }
 
@@ -65,7 +65,7 @@ void		instruction_collect(t_parse *parser, t_list **tokens)
 	ft_bzero(&op_name, sizeof(t_asop));
 	op_name.name = FT_LSTCONT(t_token, *tokens)->content;
 	if (!(asop = ft_htget(parser->op_htable, &op_name)))
-		collection_error(ERR_INVALID_INSTRUCT, FT_LSTCONT(t_token, *tokens));
+		collection_error(ERR_INV_INST, FT_LSTCONT(t_token, *tokens), parser);
 	pos = parser->position++;
 	parser->position += (asop->arg_types_code) ? 1 : 0;
 	arg_num = -1;
@@ -73,7 +73,7 @@ void		instruction_collect(t_parse *parser, t_list **tokens)
 	{
 		*tokens = (*tokens)->next;
 		if (!(asop->arg_types[arg_num] & get_arg_type(*tokens)))
-			collection_error(ERR_INVALID_PARAM, FT_LSTCONT(t_token, *tokens));
+			collection_error(ERR_INV_PRM, FT_LSTCONT(t_token, *tokens), parser);
 		if (get_arg_type(*tokens) & T_DIR)
 			mention_collect(parser, *tokens, pos, asop->t_dir_size);
 		else if (get_arg_type(*tokens) & T_IND)
@@ -83,7 +83,7 @@ void		instruction_collect(t_parse *parser, t_list **tokens)
 		*tokens = (*tokens)->next;
 		if (FT_LSTCONT(t_token, *tokens)->type != SEPARATOR &&
 		FT_LSTCONT(t_token, *tokens)->type != END_LINE)
-			collection_error(ERR_SYNTAX, FT_LSTCONT(t_token, *tokens));
+			collection_error(ERR_SYNTAX, FT_LSTCONT(t_token, *tokens), parser);
 	}
 }
 

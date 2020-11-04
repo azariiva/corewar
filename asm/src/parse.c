@@ -6,7 +6,7 @@
 /*   By: fhilary <fhilary@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/01 15:32:10 by fhilary           #+#    #+#             */
-/*   Updated: 2020/11/03 18:09:28 by fhilary          ###   ########.fr       */
+/*   Updated: 2020/11/04 20:20:34 by fhilary          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ void	string_parse(t_parse *parser, char *line)
 	}
 	parser->column += ft_strlen(line) + 1;
 	if (ft_strlen(line) > COMMENT_LENGTH)
-		error(ERR_LEN_STRING);
+		error(ERR_LEN_STRING, parser);
 	ft_strncpy(GET_PTOKENS(parser, content, FT_QUETAIL), line,
 	ft_strlen(line) - 1);
 }
@@ -41,8 +41,8 @@ void	number_parse(t_parse *parser, char *line)
 	while (line[len] && ft_isdigit(line[len]))
 		len++;
 	if (line[len] && !ft_isspace(line[len]) && line[len] != '-' &&
-	line[len] != SEPARATOR_CHAR)
-		lex_error(parser->row, parser->column + len);
+	line[len] != SEPARATOR_CHAR && line[len] != COMMENT_CHAR)
+		lex_error(parser, parser->column + len);
 	ft_strncpy(GET_PTOKENS(parser, content, FT_QUETAIL),
 	line + parser->column, len - parser->column);
 	parser->column = len;
@@ -62,7 +62,7 @@ void	lable_parse(t_parse *parser, char *line)
 		len++;
 	if (line[len] && !ft_isspace(line[len]) && line[len] != '-' &&
 	line[len] != SEPARATOR_CHAR)
-		lex_error(parser->row, parser->column + len);
+		lex_error(parser, parser->column + len);
 	ft_strncpy(GET_PTOKENS(parser, content, FT_QUETAIL),
 	line + parser->column, len - parser->column);
 	parser->column = len;
@@ -109,8 +109,8 @@ void	other_parse(t_parse *parser, char *line)
 		return ;
 	}
 	if (line[len] && !ft_isspace(line[len]) && line[len] != SEPARATOR_CHAR &&
-	line[len] != COMMENT_CHAR)
-		lex_error(parser->row, parser->column + len);
+	line[len] != COMMENT_CHAR && line[len] != DIRECT_CHAR)
+		lex_error(parser, parser->column + len);
 	if (flag)
 		GET_PTOKENS(parser, type, FT_QUETAIL) = INSTRUCTION;
 	ft_strncpy(GET_PTOKENS(parser, content, FT_QUETAIL),
@@ -129,7 +129,7 @@ void	parse(t_parse *parser)
 		row = parser->row;
 		parser->column = 0;
 		pr_skip_space(parser, line);
-		if (!line[parser->column] && !(parser->tokens &&
+		if (!line[parser->column] && !(parser->tokens->tail &&
 		FT_QUETAIL(t_token, parser->tokens)->type == NEW_LINE))
 			add_token(parser, NEW_LINE, line);
 		while (row == parser->row && line[parser->column])
@@ -143,7 +143,7 @@ void	parse(t_parse *parser)
 		ft_strdel(&line);
 	}
 	if ((int)size == ERR)
-		error(ERR_READ_FILE);
+		error(ERR_READ_FILE, parser);
 	if (size == END)
 		add_token(parser, END_FILE, line);
 }
