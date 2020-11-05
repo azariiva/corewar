@@ -6,7 +6,7 @@
 /*   By: fhilary <fhilary@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/01 15:36:15 by fhilary           #+#    #+#             */
-/*   Updated: 2020/11/04 20:28:56 by fhilary          ###   ########.fr       */
+/*   Updated: 2020/11/05 21:58:54 by fhilary          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ static void		execute(char *file)
 	if ((parser.fdout = open(new_filename(file, ".cor"),
 	O_CREAT | O_TRUNC | O_WRONLY, 0644)) < 0)
 		error(ERR_CREATE_FILE, &parser);
-	if (parser.position > CHAMP_MAX_SIZE)
+	if (parser.position > CHAMP_MAX_SIZE || parser.position == 0)
 		error(ERR_INVALID_CODE_SIZE, &parser);
 	shaping(&parser);
 	ft_printf("Writing output program to %s\n", new_filename(file, ".cor"));

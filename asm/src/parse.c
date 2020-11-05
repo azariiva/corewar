@@ -6,17 +6,23 @@
 /*   By: fhilary <fhilary@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/01 15:32:10 by fhilary           #+#    #+#             */
-/*   Updated: 2020/11/04 20:20:34 by fhilary          ###   ########.fr       */
+/*   Updated: 2020/11/05 21:51:44 by fhilary          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "asm.h"
 
+static int def_check(char c)
+{
+	return (c && !ft_isspace(c) && c != '-' &&
+	c != SEPARATOR_CHAR && c != COMMENT_CHAR);
+}
+
 void	string_parse(t_parse *parser, char *line)
 {
 	char	*newline;
 
-	line = line + parser->column + 1;
+	line += parser->column + 1;
 	while (!ft_strchr(line, '\"') &&
 	get_next_line(parser->fdin, &newline) == OK && ++parser->row)
 	{
@@ -24,9 +30,11 @@ void	string_parse(t_parse *parser, char *line)
 		line = ft_strjoin(line, newline);
 		ft_strdel(&newline);
 	}
-	parser->column += ft_strlen(line) + 1;
-	if (ft_strlen(line) > COMMENT_LENGTH)
+	if (line[ft_strlen(line) - 1] != '\"')
+		error(ERR_STRING, parser);
+	if (ft_strlen(line) - 1 > COMMENT_LENGTH)
 		error(ERR_LEN_STRING, parser);
+	parser->column += ft_strlen(line) + 1;
 	ft_strncpy(GET_PTOKENS(parser, content, FT_QUETAIL), line,
 	ft_strlen(line) - 1);
 }
@@ -40,8 +48,7 @@ void	number_parse(t_parse *parser, char *line)
 		len++;
 	while (line[len] && ft_isdigit(line[len]))
 		len++;
-	if (line[len] && !ft_isspace(line[len]) && line[len] != '-' &&
-	line[len] != SEPARATOR_CHAR && line[len] != COMMENT_CHAR)
+	if (!(len - parser->column - 1) || def_check(line[len]))
 		lex_error(parser, parser->column + len);
 	ft_strncpy(GET_PTOKENS(parser, content, FT_QUETAIL),
 	line + parser->column, len - parser->column);
@@ -60,8 +67,7 @@ void	lable_parse(t_parse *parser, char *line)
 	len = parser->column + 2;
 	while (line[len] && is_symbol(line[len]))
 		len++;
-	if (line[len] && !ft_isspace(line[len]) && line[len] != '-' &&
-	line[len] != SEPARATOR_CHAR)
+	if (def_check(line[len]))
 		lex_error(parser, parser->column + len);
 	ft_strncpy(GET_PTOKENS(parser, content, FT_QUETAIL),
 	line + parser->column, len - parser->column);
@@ -108,8 +114,7 @@ void	other_parse(t_parse *parser, char *line)
 		parser->column += len + 1;
 		return ;
 	}
-	if (line[len] && !ft_isspace(line[len]) && line[len] != SEPARATOR_CHAR &&
-	line[len] != COMMENT_CHAR && line[len] != DIRECT_CHAR)
+	if (def_check(line[len]) && line[len] != DIRECT_CHAR && line[len] != '-')
 		lex_error(parser, parser->column + len);
 	if (flag)
 		GET_PTOKENS(parser, type, FT_QUETAIL) = INSTRUCTION;

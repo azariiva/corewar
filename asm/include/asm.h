@@ -6,7 +6,7 @@
 /*   By: fhilary <fhilary@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/08 19:53:09 by blinnea           #+#    #+#             */
-/*   Updated: 2020/11/04 20:07:34 by fhilary          ###   ########.fr       */
+/*   Updated: 2020/11/05 21:22:22 by fhilary          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,7 @@
 # define ERR_INVALID_CODE_SIZE	"ERROR: Invalid code size"
 
 # define LEXICAL_ERROR			"Lexical error at"
+# define ERR_STRING				"Error in name or comment string"
 # define ERR_LEN_STRING			"String too long (Max length 2048)"
 # define ERR_NAME_LEN			"Champion name too long (Max length 128)"
 # define ERR_COMMENT_LEN		"Champion comment too long (Max length 2048)"

@@ -6,34 +6,46 @@
 /*   By: fhilary <fhilary@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/01 14:49:13 by fhilary           #+#    #+#             */
-/*   Updated: 2020/11/04 20:07:51 by fhilary          ###   ########.fr       */
+/*   Updated: 2020/11/05 21:57:12 by fhilary          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "asm.h"
 
-static void	info_collect(t_parse *parser)
+static void champ_info_collect(t_parse *parser)
 {
+	int		name;
+	int		comment;
+	t_token	*token;
+	t_token	*string;
+
 	coll_skip_tokens(parser);
-	if (GET_PTOKENS(parser, type, FT_QUEHEAD) == COMMAND_NAME)
+	name = 0;
+	comment = 0;
+	while (!name || !comment)
 	{
-		ft_quepop(parser->tokens);
-		if (ft_strlen(GET_PTOKENS(parser, content, FT_QUEHEAD)) >
-		PROG_NAME_LENGTH)
-			error(ERR_NAME_LEN, parser);
-		ft_strcpy(parser->name,
-		FT_LSTCONT(t_token, ft_quepop(parser->tokens))->content);
-		info_collect(parser);
+		token = FT_LSTCONT(t_token, ft_quepop(parser->tokens));
+		if (token->type == COMMAND_NAME)
+		{
+			name = 1;
+			if ((string = FT_LSTCONT(t_token, ft_quepop(parser->tokens)))->type
+			!= STRING)
+				error(ERR_NO_NAME_OR_COMMENT, parser);
+			if (ft_strlen(string->content) > PROG_NAME_LENGTH)
+				error(ERR_NAME_LEN, parser);
+			ft_strcpy(parser->name, string->content);
+		}
+		else if (token->type == COMMAND_COMMENT)
+		{
+			comment = 1;
+			if ((string = FT_LSTCONT(t_token, ft_quepop(parser->tokens)))->type
+			!= STRING)
+				error(ERR_NO_NAME_OR_COMMENT, parser);
+			ft_strcpy(parser->comment, string->content);
+		}
+		else if (token->type != END_LINE && token->type != NEW_LINE)
+			error(ERR_NO_NAME_OR_COMMENT, parser);
 	}
-	else if (GET_PTOKENS(parser, type, FT_QUEHEAD) == COMMAND_COMMENT)
-	{
-		ft_quepop(parser->tokens);
-		ft_strcpy(parser->comment,
-		FT_LSTCONT(t_token, ft_quepop(parser->tokens))->content);
-		info_collect(parser);
-	}
-	else if (!*parser->name || !*parser->comment)
-		error(ERR_NO_NAME_OR_COMMENT, parser);
 }
 
 static void	mention_collect(t_parse *parser, t_list *token, int pos, int size)
@@ -85,6 +97,8 @@ void		instruction_collect(t_parse *parser, t_list **tokens)
 		FT_LSTCONT(t_token, *tokens)->type != END_LINE)
 			collection_error(ERR_SYNTAX, FT_LSTCONT(t_token, *tokens), parser);
 	}
+	if (FT_LSTCONT(t_token, *tokens)->type != END_LINE)
+		collection_error(ERR_SYNTAX, FT_LSTCONT(t_token, *tokens), parser);
 }
 
 void		collection(t_parse *parser)
@@ -92,7 +106,7 @@ void		collection(t_parse *parser)
 	t_list		*tokens;
 	t_lable		lable_name;
 
-	info_collect(parser);
+	champ_info_collect(parser);
 	tokens = parser->tokens->head;
 	while (tokens && FT_LSTCONT(t_token, tokens)->type != END_FILE)
 	{
