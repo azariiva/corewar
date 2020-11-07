@@ -6,7 +6,7 @@
 /*   By: fhilary <fhilary@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/01 15:32:10 by fhilary           #+#    #+#             */
-/*   Updated: 2020/11/05 21:51:44 by fhilary          ###   ########.fr       */
+/*   Updated: 2020/11/07 17:08:38 by fhilary          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 static int def_check(char c)
 {
 	return (c && !ft_isspace(c) && c != '-' &&
-	c != SEPARATOR_CHAR && c != COMMENT_CHAR);
+	c != SEPARATOR_CHAR && c != COMMENT_CHAR && c != ALT_COMMENT_CHAR);
 }
 
 void	string_parse(t_parse *parser, char *line)

@@ -6,7 +6,7 @@
 /*   By: fhilary <fhilary@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/01 15:36:15 by fhilary           #+#    #+#             */
-/*   Updated: 2020/11/05 21:58:54 by fhilary          ###   ########.fr       */
+/*   Updated: 2020/11/07 17:23:15 by fhilary          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ static void		execute(char *file)
 	if ((parser.fdout = open(new_filename(file, ".cor"),
 	O_CREAT | O_TRUNC | O_WRONLY, 0644)) < 0)
 		error(ERR_CREATE_FILE, &parser);
-	if (parser.position > CHAMP_MAX_SIZE || parser.position == 0)
+	if (!parser.position)
 		error(ERR_INVALID_CODE_SIZE, &parser);
 	shaping(&parser);
 	ft_printf("Writing output program to %s\n", new_filename(file, ".cor"));
@@ -58,6 +58,6 @@ int				main(int ac, char **av)
 	if (ac == 2 && isrighttype(av[1]))
 		execute(av[1]);
 	else
-		ft_printf("Wrong file type\n");
+		ft_printf_fd(STDERR_FILENO, "Wrong file type\n");
 	return (0);
 }
