@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   label_htable.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fhilary <fhilary@student.42.fr>            +#+  +:+       +#+        */
+/*   By: blinnea <blinnea@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/01 15:36:03 by fhilary           #+#    #+#             */
-/*   Updated: 2020/11/03 17:35:43 by fhilary          ###   ########.fr       */
+/*   Updated: 2020/11/07 20:54:21 by blinnea          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ void					clear_label_htable(t_htable **lht)
 
 void					get_label_htable(t_parse *parser)
 {
-	t_list		*tokens;
+	t_dlist		*tokens;
 	t_lable		lable;
 
 	parser->lables = ft_htnew(parser->label_count, cmp, hash);

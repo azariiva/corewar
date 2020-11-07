@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   asm.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fhilary <fhilary@student.42.fr>            +#+  +:+       +#+        */
+/*   By: blinnea <blinnea@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/01 15:36:15 by fhilary           #+#    #+#             */
-/*   Updated: 2020/11/07 17:23:15 by fhilary          ###   ########.fr       */
+/*   Updated: 2020/11/07 20:29:36 by blinnea          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ void			clear_parser(t_parse *parser)
 	if (parser->op_htable)
 		clear_op_htable(&(parser->op_htable));
 	if (parser->tokens)
-		ft_quedel(&(parser->tokens));
+		ft_elistdel(&(parser->tokens));
 }
 
 static void		execute(char *file)
@@ -34,7 +34,7 @@ static void		execute(char *file)
 	t_parse	parser;
 
 	ft_bzero(&parser, sizeof(t_parse));
-	parser.tokens = ft_quenew(quedel);
+	parser.tokens = ft_elistnew(sizeof(t_token), quedel);
 	if ((parser.fdin = open(file, O_RDONLY)) < 0)
 		error(ERR_OPEN_FILE, &parser);
 	parse(&parser);

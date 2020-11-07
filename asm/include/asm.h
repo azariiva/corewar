@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   asm.h                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fhilary <fhilary@student.42.fr>            +#+  +:+       +#+        */
+/*   By: blinnea <blinnea@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/08 19:53:09 by blinnea           #+#    #+#             */
-/*   Updated: 2020/11/07 20:16:02 by fhilary          ###   ########.fr       */
+/*   Updated: 2020/11/07 20:54:13 by blinnea          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,7 +111,7 @@ typedef struct	s_parse
 	int			fdout;
 	int			row;
 	int			column;
-	t_queue		*tokens;
+	t_elist		*tokens;
 	int32_t		position;
 	int			label_count;
 	t_htable	*op_htable;
@@ -141,10 +141,10 @@ int				is_symbol(char c);
 void			collection(t_parse *parser);
 void			coll_skip_tokens(t_parse *parser);
 void			champ_info_collect(t_parse *parser);
-void			mention_collect(t_parse *parser, t_list *token,
+void			mention_collect(t_parse *parser, t_token *token,
 int pos, int size);
 void			champ_info_collect(t_parse *parser);
-void			instruction_collect(t_parse *parser, t_list **tokens);
+void			instruction_collect(t_parse *parser, t_dlist **tokens);
 
 void			collect_error(char *type, t_token *token, t_parse *parser);
 void			lex_error(t_parse *parser, int column);
@@ -154,7 +154,7 @@ void			shaping(t_parse *parser);
 
 void			show_tokens(t_parse *parser);
 
-int				get_arg_type(t_list *ltoken);
+int				get_arg_type(t_token *token);
 void			get_label_htable(t_parse *parser);
 void			get_op_htable(t_parse *parser);
 

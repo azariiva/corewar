@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   skip.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fhilary <fhilary@student.42.fr>            +#+  +:+       +#+        */
+/*   By: blinnea <blinnea@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/01 15:31:52 by fhilary           #+#    #+#             */
-/*   Updated: 2020/11/07 18:41:09 by fhilary          ###   ########.fr       */
+/*   Updated: 2020/11/07 20:46:57 by blinnea          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,5 +29,5 @@ void	coll_skip_tokens(t_parse *parser)
 {
 	while (GET_PTOKENS(parser, type, FT_QUEHEAD) == NEW_LINE ||
 	GET_PTOKENS(parser, type, FT_QUEHEAD) == END_LINE)
-		ft_quepop(parser->tokens);
+		ft_elistpoptop(parser->tokens);
 }

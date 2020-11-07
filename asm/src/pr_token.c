@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pr_token.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fhilary <fhilary@student.42.fr>            +#+  +:+       +#+        */
+/*   By: blinnea <blinnea@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/01 15:31:30 by fhilary           #+#    #+#             */
-/*   Updated: 2020/11/07 20:13:40 by fhilary          ###   ########.fr       */
+/*   Updated: 2020/11/07 20:34:05 by blinnea          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ void			add_token(t_parse *parser, t_type type, char *line)
 	token.type = type;
 	token.row = parser->row;
 	token.column = parser->column + 1;
-	ft_quevadd(parser->tokens, &token, sizeof(t_token));
+	ft_elistpushbot(parser->tokens, &token);
 	if (type == SEP)
 		parser->column++;
 	else if (type == COMMAND_NAME)

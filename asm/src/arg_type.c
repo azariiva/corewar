@@ -3,20 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   arg_type.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fhilary <fhilary@student.42.fr>            +#+  +:+       +#+        */
+/*   By: blinnea <blinnea@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/01 15:02:28 by fhilary           #+#    #+#             */
-/*   Updated: 2020/09/01 15:05:32 by fhilary          ###   ########.fr       */
+/*   Updated: 2020/11/07 20:37:51 by blinnea          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "asm.h"
 
-int		get_arg_type(t_list *ltoken)
+int		get_arg_type(t_token *token)
 {
-	t_token	*token;
-
-	token = FT_LSTCONT(t_token, ltoken);
 	if (token->type == INDIRECT || token->type == INDIRECT_LABLE)
 		return (T_IND);
 	else if (token->type == REGISTER)
