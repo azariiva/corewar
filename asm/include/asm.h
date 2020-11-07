@@ -6,19 +6,21 @@
 /*   By: fhilary <fhilary@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/08 19:53:09 by blinnea           #+#    #+#             */
-/*   Updated: 2020/11/07 17:23:38 by fhilary          ###   ########.fr       */
+/*   Updated: 2020/11/07 20:16:02 by fhilary          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef ACM_H
+#ifndef ASM_H
 
-# define ACM_H
+# define ASM_H
 
 # include "libft.h"
 # include <stdlib.h>
+# include <unistd.h>
 # include <fcntl.h>
+# include <limits.h>
 # include "libft_printf.h"
-#include "libft_get_next_line.h"
+# include "libft_get_next_line.h"
 # include "op.h"
 
 # define ERR_PARSER_INIT		"ERROR: Can\'t initialize parser"
@@ -53,7 +55,7 @@ typedef enum	e_type
 	INDIRECT,
 	INDIRECT_LABLE,
 	REGISTER,
-	SEPARATOR,
+	SEP,
 	DIRECT_LABEL,
 	DIRECT,
 	STRING,
@@ -71,7 +73,7 @@ static char	*g_typearr[] = {
 	"INDIRECT",
 	"INDIRECT_LABEL"
 	"REGISTER",
-	"SEPARATOR",
+	"SEP",
 	"DIRECT_LABEL",
 	"DIRECT",
 	"STRING",
@@ -82,11 +84,6 @@ static char	*g_typearr[] = {
 };
 
 # define TSTR(T) (g_typearr[T])
-
-# define REV_4(n) (((n) >> 24) & 0x000000FF) | (((n) >> 8) & 0x0000FF00) | \
-(((n) << 8) & 0x00FF0000) | (((n) << 24) & 0xFF000000)
-
-# define REV_2(n) ((((n) >> 8) & 0x00FF) | (((n) << 8) & 0xFF00))
 
 typedef struct	s_token
 {
@@ -130,7 +127,7 @@ char			*new_filename(char *file, char *type);
 void			add_token(t_parse *parser, t_type type, char *line);
 
 void			parse(t_parse *parser);
-void			pr_skip_space(t_parse *parser, char *line);
+int				pr_skip_space(t_parse *parser, char *line);
 void			pr_gettoken(t_parse *parser, char *line);
 void			string_parse(t_parse *parser, char *line);
 void			lable_parse(t_parse *parser, char *line);
@@ -138,11 +135,18 @@ void			number_parse(t_parse *parser, char *line);
 void			register_parse(t_parse *parser, char *line);
 int				register_len(t_parse *parser, char *line);
 void			other_parse(t_parse *parser, char *line);
+int				const_check(char c);
+int				is_symbol(char c);
 
 void			collection(t_parse *parser);
 void			coll_skip_tokens(t_parse *parser);
+void			champ_info_collect(t_parse *parser);
+void			mention_collect(t_parse *parser, t_list *token,
+int pos, int size);
+void			champ_info_collect(t_parse *parser);
+void			instruction_collect(t_parse *parser, t_list **tokens);
 
-void			collection_error(char *type, t_token *token, t_parse *parser);
+void			collect_error(char *type, t_token *token, t_parse *parser);
 void			lex_error(t_parse *parser, int column);
 void			error(char *err, t_parse *parser);
 
@@ -157,5 +161,7 @@ void			get_op_htable(t_parse *parser);
 void			clear_label_htable(t_htable **lht);
 void			clear_op_htable(t_htable **oht);
 void			clear_parser(t_parse *parse);
+
+void			wwrite(t_parse *parser, int n, int size);
 
 #endif

@@ -6,13 +6,11 @@
 /*   By: fhilary <fhilary@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/28 14:17:55 by fhilary           #+#    #+#             */
-/*   Updated: 2020/11/05 20:36:10 by fhilary          ###   ########.fr       */
+/*   Updated: 2020/11/07 18:09:24 by fhilary          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "asm.h"
-#include <unistd.h>
-#include <limits.h>
 
 int		get_arg_type_code(t_parse *parser)
 {
@@ -37,22 +35,6 @@ int		get_arg_type_code(t_parse *parser)
 		tokens = tokens->next;
 	}
 	return (x);
-}
-
-void	wwrite(t_parse *parser, int n, int size)
-{
-	short	n1;
-
-	if (size == 2)
-	{
-		n1 = (short)n;
-		n1 = REV_2(n1);
-		write(parser->fdout, &n1, size);
-		return ;
-	}
-	if (size == 4)
-		n = REV_4(n);
-	write(parser->fdout, &n, size);
 }
 
 void	dir_shape(t_parse *parser, t_token *token, t_asop *asop)

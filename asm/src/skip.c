@@ -6,13 +6,13 @@
 /*   By: fhilary <fhilary@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/01 15:31:52 by fhilary           #+#    #+#             */
-/*   Updated: 2020/11/05 18:55:46 by fhilary          ###   ########.fr       */
+/*   Updated: 2020/11/07 18:41:09 by fhilary          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "asm.h"
 
-void	pr_skip_space(t_parse *parser, char *line)
+int		pr_skip_space(t_parse *parser, char *line)
 {
 	while (ft_isspace(line[parser->column]))
 		parser->column++;
@@ -22,6 +22,7 @@ void	pr_skip_space(t_parse *parser, char *line)
 		while (line[parser->column])
 			parser->column++;
 	}
+	return (OK);
 }
 
 void	coll_skip_tokens(t_parse *parser)

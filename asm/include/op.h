@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   op.h                                               :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: fhilary <fhilary@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2020/11/07 17:34:20 by fhilary           #+#    #+#             */
+/*   Updated: 2020/11/07 17:38:51 by fhilary          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef OP_H
 
 # define OP_H
@@ -36,10 +48,6 @@
 # define NBR_LIVE				21
 # define MAX_CHECKS				10
 
-/*
-**
-*/
-
 typedef char	t_arg_type;
 
 # define T_REG					1
@@ -47,21 +55,17 @@ typedef char	t_arg_type;
 # define T_IND					4
 # define T_LAB					8
 
-/*
-**
-*/
-
 # define PROG_NAME_LENGTH		(128)
 # define COMMENT_LENGTH			(2048)
 # define COREWAR_EXEC_MAGIC		0xea83f3
 
-typedef struct		header_s
+typedef struct		s_header
 {
-  unsigned int		magic;
-  char				prog_name[PROG_NAME_LENGTH + 1];
-  unsigned int		prog_size;
-  char				comment[COMMENT_LENGTH + 1];
-}					header_t;
+	unsigned int		magic;
+	char				prog_name[PROG_NAME_LENGTH + 1];
+	unsigned int		prog_size;
+	char				comment[COMMENT_LENGTH + 1];
+}					t_header;
 
 typedef struct		s_asop
 {
@@ -73,7 +77,7 @@ typedef struct		s_asop
 	int			t_dir_size;
 }					t_asop;
 
-static const t_asop    op_tab[16] =
+static const t_asop	g_op_tab[16] =
 {
 	{
 		.name = "live",

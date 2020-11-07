@@ -6,7 +6,7 @@
 /*   By: fhilary <fhilary@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/01 15:31:30 by fhilary           #+#    #+#             */
-/*   Updated: 2020/11/03 17:24:08 by fhilary          ###   ########.fr       */
+/*   Updated: 2020/11/07 20:13:40 by fhilary          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ void			add_token(t_parse *parser, t_type type, char *line)
 	token.row = parser->row;
 	token.column = parser->column + 1;
 	ft_quevadd(parser->tokens, &token, sizeof(t_token));
-	if (type == SEPARATOR)
+	if (type == SEP)
 		parser->column++;
 	else if (type == COMMAND_NAME)
 		parser->column += 5;
@@ -45,7 +45,7 @@ void			pr_gettoken(t_parse *parser, char *line)
 	!(parser->tokens && FT_QUETAIL(t_token, parser->tokens)->type == NEW_LINE))
 		add_token(parser, NEW_LINE, line);
 	else if (line[parser->column] == SEPARATOR_CHAR)
-		add_token(parser, SEPARATOR, line);
+		add_token(parser, SEP, line);
 	else if (ft_strnstr(line + parser->column, NAME_CMD_STRING, 5))
 		add_token(parser, COMMAND_NAME, line);
 	else if (ft_strnstr(line + parser->column, COMMENT_CMD_STRING, 8))

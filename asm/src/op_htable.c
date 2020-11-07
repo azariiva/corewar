@@ -6,7 +6,7 @@
 /*   By: fhilary <fhilary@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/01 15:36:37 by fhilary           #+#    #+#             */
-/*   Updated: 2020/11/03 17:38:13 by fhilary          ###   ########.fr       */
+/*   Updated: 2020/11/07 18:14:55 by fhilary          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,8 +45,9 @@ void					get_op_htable(t_parse *parser)
 {
 	size_t		i;
 
-	parser->op_htable = ft_htnew((sizeof(op_tab) / sizeof(*op_tab)), cmp, hash);
+	parser->op_htable = ft_htnew((sizeof(g_op_tab) / sizeof(*g_op_tab)),
+	cmp, hash);
 	i = -1;
-	while (++i < (sizeof(op_tab) / sizeof(*op_tab)))
-		ft_htadd(parser->op_htable, op_tab + i, sizeof(*op_tab));
+	while (++i < (sizeof(g_op_tab) / sizeof(*g_op_tab)))
+		ft_htadd(parser->op_htable, g_op_tab + i, sizeof(*g_op_tab));
 }
