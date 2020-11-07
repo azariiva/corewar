@@ -5,7 +5,7 @@
             "includePath": [
 				"${workspaceFolder}/libft/include",
 				"${workspaceFolder}/asm/include",
-				"${workspaceFolder}/visualizer/include",
+				"${workspaceFolder}/visu/include",
 				"${workspaceFolder}/vm/include"
             ],
             "defines": [],
